@@ -6,7 +6,7 @@
 
     <groupId>rocks.palaiologos</groupId>
     <artifactId>maja</artifactId>
-    <version>0.2.0-beta3</version>
+    <version>0.2.1</version>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

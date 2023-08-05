@@ -2717,6 +2717,26 @@ public class Maja {
     }
 
     /**
+     * Returns an integer b such that |B_n| &le; 2^b for all Bernoulli numbers B_n.
+     * @param n
+     * @return
+     */
+    public static int bernoulliBound(int n) {
+        if (n % 2 == 1 || n <= 13) return 0; // 2^0 = 1, B_n up until 13 are |B_n| <= 1.
+        // str:implode-on "," \:to-string \ceil (log2 (filter #0 (abs (:bernoulli (range 14 80)))))
+        final int lut[] = { 1,3,6,10,13,17,21,25,30,34,39,44,49,55,60,66,71,77,83,89,95,102,108,115,121,128,135,141,148,155,162,170,177 };
+        // lut[0] = B_14, lut[1] = B_16, lut[2] = B_18, ...
+        int i = (n - 14) / 2;
+        if (i < lut.length) return lut[i];
+        else {
+            // |B_n| < 4n!/(2pi)^n < 4(n+1)^(n+1)e^(-n)/(2pi)^n (per Stirling)
+            // trivially, log2(4(n+1)^(n+1)e^(-n)/(2pi)^n)=log2(4(n+1)^(n+1))-n*log2(e)-n*log2(2pi)
+            double f = (n+1)*log(n+1)/log(2)+2;
+            return (int) ceil(f - n * log2(E) - n * log2(2 * PI));
+        }
+    }
+
+    /**
      * Add two complex numbers together.
      *
      * @param a

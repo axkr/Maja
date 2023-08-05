@@ -154,6 +154,12 @@ public class TestArithmetic {
     }
 
     @Test
+    public void testBern() {
+        assertThat(Maja.bernoulliBound(40)).isEqualTo(55);
+        assertThat(Maja.bernoulliBound(300)).isEqualTo(1253); // 1247
+    }
+
+    @Test
     public void testNChooseK() {
         for(int n = 1; n <= 60; n++) {
             assertEquals(Maja.binomial(n, 1), n);

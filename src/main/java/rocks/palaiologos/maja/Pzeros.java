@@ -5,7 +5,7 @@ import java.util.Arrays;
 /**
  * Originally written by D. Bini in Fortran77.
  */
-public class Pzeros {
+class Pzeros {
     static Pzeros pz = new Pzeros();
     doublecomplex c_b35 = new doublecomplex(1., 0.);
 
