@@ -17,7 +17,7 @@ From Maven Central:
 <dependency>
     <groupId>rocks.palaiologos</groupId>
     <artifactId>maja</artifactId>
-    <version>0.1.10</version>
+    <version>0.2.1</version>
 </dependency>
 ```
 
@@ -50,6 +50,7 @@ Real Functions:
 - Root finding (Newton-Raphson method).
 - Landau functions.
 - Chi squared and Normal distribution quantiles.
+- Bernoulli numbers bounding.
 - Struve functions (H0, H1, Hx for double precision x, L0, L1)
 
 Complex functions:
