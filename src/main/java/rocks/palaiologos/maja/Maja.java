@@ -2867,6 +2867,56 @@ public class Maja {
         return new Dual(re, du);
     }
 
+    public static Dual asin(Dual a) {
+        // asin(a+bε) = asin(a) + b/sqrt(1-a^2)ε
+        double re = asin(a.a());
+        double du = a.b() / sqrt(1 - a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual acos(Dual a) {
+        // acos(a+bε) = acos(a) - b/sqrt(1-a^2)ε
+        double re = acos(a.a());
+        double du = -a.b() / sqrt(1 - a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual atan(Dual a) {
+        // atan(a+bε) = atan(a) + b/(1+a^2)ε
+        double re = atan(a.a());
+        double du = a.b() / (1 + a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual sqrt(Dual a) {
+        // sqrt(a+bε) = sqrt(a) + b/(2*sqrt(a))ε
+        double re = sqrt(a.a());
+        double du = a.b() / (2 * sqrt(a.a()));
+        return new Dual(re, du);
+    }
+
+    public static Dual sinh(Dual a) {
+        // sinh(a+bε) = sinh(a) + cosh(a)bε
+        double re = sinh(a.a());
+        double du = cosh(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual cosh(Dual a) {
+        // cosh(a+bε) = cosh(a) + sinh(a)bε
+        double re = cosh(a.a());
+        double du = sinh(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual tanh(Dual a) {
+        // tanh(a+bε) = tanh(a) + b*sech^2(a)ε
+        double re = tanh(a.a());
+        double ch = cosh(a.a());
+        double du = a.b() / (ch * ch);
+        return new Dual(re, du);
+    }
+
     /**
      * Add a complex number and a real number.
      *
