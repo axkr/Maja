@@ -2917,6 +2917,73 @@ public class Maja {
         return new Dual(re, du);
     }
 
+    public static Dual gamma(Dual a) {
+        // gamma(a+bε) = gamma(a) + gamma(a)ψ(a)bε
+        double re = gamma(a.a());
+        double du = gamma(a.a()) * digamma(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual digamma(Dual a) {
+        // digamma(a+bε) = digamma(a) + trigamma(a)bε
+        double re = digamma(a.a());
+        double du = trigamma(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual airyAi(Dual a) {
+        double[] r = airy(a.a());
+        return new Dual(r[0], r[1] * a.b());
+    }
+
+    public static Dual airyBi(Dual a) {
+        double[] r = airy(a.a());
+        return new Dual(r[2], r[3] * a.b());
+    }
+
+    public static Dual Chi(Dual a) {
+        // Chi(a+bε) = Chi(a) + cosh(a)bε/a
+        double re = Chi(a.a());
+        double du = cosh(a.a()) * a.b() / a.a();
+        return new Dual(re, du);
+    }
+
+    public static Dual Shi(Dual a) {
+        // Shi(a+bε) = Shi(a) + sinh(a)bε/a
+        double re = Shi(a.a());
+        double du = sinh(a.a()) * a.b() / a.a();
+        return new Dual(re, du);
+    }
+
+    public static Dual Ci(Dual a) {
+        double re = Ci(a.a());
+        double du = cos(a.a()) * a.b() / a.a();
+        return new Dual(re, du);
+    }
+
+    public static Dual Si(Dual a) {
+        double re = Si(a.a());
+        double du = sin(a.a()) * a.b() / a.a();
+        return new Dual(re, du);
+    }
+
+    public static Dual Ei(Dual a) {
+        double re = Ei(a.a());
+        double du = exp(a.a()) * a.b() / a.a();
+        return new Dual(re, du);
+    }
+
+    public static Dual erf(Dual a) {
+        double re = erf(a.a());
+        double du = 2 * exp(-a.a() * a.a()) * a.b() / sqrt(PI);
+        return new Dual(re, du);
+    }
+
+    public static Dual dilog(Dual a) {
+        // dilog(a+bε) = dilog(a) + -b*log(1-a)/aε
+        return new Dual(dilog(a.a()), -a.b() * log(1 - a.a()) / a.a());
+    }
+
     /**
      * Add a complex number and a real number.
      *
