@@ -1,2 +1,2 @@
 
-Test SVD, new expression support => if coverage is above 70%, ship v0.2.0.
+More dual numbers.
