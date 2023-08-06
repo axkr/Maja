@@ -17,7 +17,7 @@ From Maven Central:
 <dependency>
     <groupId>rocks.palaiologos</groupId>
     <artifactId>maja</artifactId>
-    <version>0.2.1</version>
+    <version>0.2.2</version>
 </dependency>
 ```
 
@@ -51,6 +51,7 @@ Real Functions:
 - Landau functions.
 - Chi squared and Normal distribution quantiles.
 - Bernoulli numbers bounding.
+- Dual numbers for real automatic differentiation.
 - Struve functions (H0, H1, Hx for double precision x, L0, L1)
 
 Complex functions:
