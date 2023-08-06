@@ -2731,8 +2731,7 @@ public class Maja {
         else {
             // |B_n| < 4n!/(2pi)^n < 4(n+1)^(n+1)e^(-n)/(2pi)^n (per Stirling)
             // trivially, log2(4(n+1)^(n+1)e^(-n)/(2pi)^n)=log2(4(n+1)^(n+1))-n*log2(e)-n*log2(2pi)
-            double f = (n+1)*log(n+1)/log(2)+2;
-            return (int) ceil(f - n * log2(E) - n * log2(2 * PI));
+            return (int) ceil((n+1)*log(n+1)/log(2)+2 - n * log2(E) - n * log2(2 * PI));
         }
     }
 
@@ -2747,6 +2746,109 @@ public class Maja {
         return new Complex(a.re() + b.re(), a.im() + b.im());
     }
 
+    /**
+     * Perform dual addition.
+     * @param a
+     * @param b
+     * @return a + b
+     */
+    public static Dual add(Dual a, Dual b) {
+        return new Dual(a.a() + b.a(), a.b() + b.b());
+    }
+
+    /**
+     * Perform real-dual addition.
+     * @param a
+     * @param b
+     * @return a + b
+     */
+    public static Dual add(Dual a, double b) {
+        return new Dual(a.a() + b, a.b());
+    }
+
+    /**
+     * Perform real-dual addition.
+     * @param a
+     * @param b
+     * @return a + b
+     */
+    public static Dual add(double a, Dual b) {
+        return new Dual(b.a() + a, b.b());
+    }
+
+    public static Dual sub(Dual a, Dual b) {
+        return new Dual(a.a() - b.a(), a.b() - b.b());
+    }
+
+    public static Dual sub(Dual a, double b) {
+        return new Dual(a.a() - b, a.b());
+    }
+
+    public static Dual sub(double a, Dual b) {
+        return new Dual(a - b.a(), -b.b());
+    }
+
+    public static Dual mul(Dual a, Dual b) {
+        return new Dual(a.a() * b.a(), a.a() * b.b() + a.b() * b.a());
+    }
+
+    public static Dual div(Dual a, Dual b) {
+        if(b.a() == 0)
+            throw new ArithmeticException("Division by zero");
+        // (a+bε)/(c+dε) = a/c + (bc-ad)/(c^2) ε
+        double re = a.a() / b.a();
+        double du = (a.b() * b.a() - a.a() * b.b()) / (b.a() * b.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual sin(Dual a) {
+        // sin(a+bε) = sin(a) + cos(a)bε
+        return new Dual(sin(a.a()), cos(a.a()) * a.b());
+    }
+
+    public static Dual cos(Dual a) {
+        // cos(a+bε) = cos(a) - sin(a)bε
+        return new Dual(cos(a.a()), -sin(a.a()) * a.b());
+    }
+
+    public static Dual tan(Dual a) {
+        // tan(a+bε) = tan(a) + b*sec^2(a)ε
+        double re = tan(a.a());
+        double ca = cos(a.a());
+        double du = a.b() / (ca * ca);
+        return new Dual(re, du);
+    }
+
+    public static Dual exp(Dual a) {
+        // exp(a+bε) = exp(a) + exp(a)bε
+        double ea = exp(a.a());
+        return new Dual(ea, ea * a.b());
+    }
+
+    public static Dual log(Dual a) {
+        // log(a+bε) = log(a) + bε/a
+        if(a.a() <= 0)
+            throw new ArithmeticException("Domain error.");
+        double re = log(a.a());
+        double du = a.b() / a.a();
+        return new Dual(re, du);
+    }
+
+    public static Dual pow(Dual a, int b) {
+        if(a.a() == 0)
+            throw new ArithmeticException("Domain error.");
+        double re = pow(a.a(), b);
+        double du = b * pow(a.a(), b - 1) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual abs(Dual a) {
+        // abs(a+bε) = |a| + sgn(a)bε
+        double re = abs(a.a());
+        double du = signum(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+    
     /**
      * Add a complex number and a real number.
      *
