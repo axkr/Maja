@@ -2806,9 +2806,19 @@ public class Maja {
         return new Dual(sin(a.a()), cos(a.a()) * a.b());
     }
 
+    public static Dual sec(Dual a) {
+        // sec(a+bε) = sec(a) + tan(a)sec(a)bε
+        return new Dual(sec(a.a()), tan(a.a()) * sec(a.a()) * a.b());
+    }
+
     public static Dual cos(Dual a) {
         // cos(a+bε) = cos(a) - sin(a)bε
         return new Dual(cos(a.a()), -sin(a.a()) * a.b());
+    }
+
+    public static Dual csc(Dual a) {
+        // csc(a+bε) = csc(a) - cot(a)csc(a)bε
+        return new Dual(csc(a.a()), -cot(a.a()) * csc(a.a()) * a.b());
     }
 
     public static Dual tan(Dual a) {
@@ -2816,6 +2826,14 @@ public class Maja {
         double re = tan(a.a());
         double ca = cos(a.a());
         double du = a.b() / (ca * ca);
+        return new Dual(re, du);
+    }
+
+    public static Dual cot(Dual a) {
+        // cot(a+bε) = cot(a) - b*sec^2(a)ε
+        double re = tan(a.a());
+        double ca = cos(a.a());
+        double du = -a.b() / (ca * ca);
         return new Dual(re, du);
     }
 
@@ -2848,7 +2866,7 @@ public class Maja {
         double du = signum(a.a()) * a.b();
         return new Dual(re, du);
     }
-    
+
     /**
      * Add a complex number and a real number.
      *
