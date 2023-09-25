@@ -699,7 +699,7 @@ public class Maja {
      * @return x * y + z
      */
     public static Complex fma(Complex x, Complex y, Complex z) {
-        return div(mul(x, y), z);
+        return add(mul(x, y), z);
     }
 
     /**
