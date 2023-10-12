@@ -3128,6 +3128,41 @@ public class Maja {
         return new Dual(re, du);
     }
 
+    public static Dual asinh(Dual a) {
+        // asinh(a+bε) = asinh(a) + b/sqrt(1+a^2)ε
+        double re = asinh(a.a());
+        double du = a.b() / sqrt(1 + a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual acosh(Dual a) {
+        // acosh(a+bε) = acosh(a) + b/(sqrt(a-1)sqrt(a+1))ε
+        double re = acosh(a.a());
+        double du = a.b() / (sqrt(a.a() - 1) * sqrt(a.a() + 1));
+        return new Dual(re, du);
+    }
+
+    public static Dual atanh(Dual a) {
+        // atanh(a+bε) = atanh(a) + b/(1-a^2)ε
+        double re = atanh(a.a());
+        double du = a.b() / (1 - a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual asech(Dual a) {
+        // asech(a+bε) = asech(a) - b/(sqrt(1/a - 1) sqrt(1/a + 1) a^2)ε
+        double re = asech(a.a());
+        double du = -a.b() / (sqrt(1 / a.a() - 1) * sqrt(1 / a.a() + 1) * a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual acsch(Dual a) {
+        // acsch(a+bε) = acsch(a) - b/(sqrt(1+1/a^2) a^2)ε
+        double re = acsch(a.a());
+        double du = -a.b() / (sqrt(1 + 1 / (a.a() * a.a())) * a.a() * a.a());
+        return new Dual(re, du);
+    }
+
     /**
      * Add a complex number and a real number.
      *

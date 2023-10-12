@@ -34,11 +34,6 @@ Implemented Duals:
 - dilog
 
 Todo:
-- asinh
-- acosh
-- atanh
-- asech
-- acsch
 - Bessel I0, I1, J0, J1, Jn, Jv,
          K0, K1, Kn, Y0, Y1, Yn, Yv
 - beta
