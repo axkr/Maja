@@ -1,2 +1,44 @@
 
-More dual numbers.
+Implemented Duals:
+- add
+- sub
+- mul
+- div
+- sin
+- sec
+- cos
+- csc
+- tan
+- cot
+- exp
+- log
+- pow
+- abs
+- asin
+- acos
+- atan
+- sqrt
+- sinh
+- cosh
+- tanh
+- gamma
+- digamma
+- airyAi
+- airyBi
+- Chi
+- Shi
+- Ci
+- Si
+- Ei
+- erf
+- dilog
+
+Todo:
+- hurwitz, riemann zeta
+- hypergeo: 1f1, 1f2, 2f1, 3f0
+- struve: l0, l1
+
+by the rule:
+
+Γ'(f(x)) = f'(x)Γ(f(x))ψ(f(x)):
+Γ(a+bε) = Γ(a) + Γ(a)ψ(a)bε

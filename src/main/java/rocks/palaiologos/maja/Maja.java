@@ -2750,7 +2750,21 @@ public class Maja {
         int n = coefficients.length;
         if (n < 1)
             throw new IllegalArgumentException("Invalid number of coefficients: " + n);
-        if(n == 2) {
+        else if (n == 2) {
+            // Linear case.
+            Complex a = coefficients[1];
+            Complex b = coefficients[0];
+            if (eq(a, Complex.ZERO)) {
+                // No roots.
+                return new boolean[]{ true };
+            } else {
+                // One root.
+                Complex x = div(negate(b), a);
+                coefficients[0] = x;
+                return new boolean[]{ false };
+            }
+        }
+        else if(n == 3) {
             // Quadratic case.
             Complex a = coefficients[2];
             Complex b = coefficients[1];
@@ -2760,8 +2774,8 @@ public class Maja {
             if (eq(d, Complex.ZERO)) {
                 // One root.
                 Complex x = div(negate(b), mul(a, 2));
-                coefficients[0] = x;
-                return new boolean[]{ false, true };
+                coefficients[0] = coefficients[1] = x;
+                return new boolean[]{ false, false };
             } else {
                 // Two roots.
                 Complex x1 = div(add(negate(b), d), mul(a, 2));
@@ -2993,6 +3007,7 @@ public class Maja {
     }
 
     public static Dual gamma(Dual a) {
+        // gamma'(f(x)) = f'(x)Γ(f(x))ψ(f(x)):
         // gamma(a+bε) = gamma(a) + gamma(a)ψ(a)bε
         double re = gamma(a.a());
         double du = gamma(a.a()) * digamma(a.a()) * a.b();
@@ -3003,6 +3018,78 @@ public class Maja {
         // digamma(a+bε) = digamma(a) + trigamma(a)bε
         double re = digamma(a.a());
         double du = trigamma(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual besselI0(Dual a) {
+        // i0(a+bε) = i0(a) + i1(a)bε
+        double re = besselI0(a.a());
+        double du = besselI1(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual besselJ0(Dual a) {
+        // j0(a+bε) = j0(a) - j1(a)bε
+        double re = besselJ0(a.a());
+        double du = -besselJ1(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual besselK0(Dual a) {
+        // k0(a+bε) = k0(a) - k1(a)bε
+        double re = besselK0(a.a());
+        double du = -besselK1(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual besselJ1(Dual a) {
+        // j1(a+bε) = j1(a) + bε(j0(a) - j2(a))/2
+        double re = besselJ1(a.a());
+        double du = a.b() * (besselJ0(a.a()) - besselJn(2, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
+    public static Dual besselY0(Dual a) {
+        // y0(a+bε) = y0(a) - y1(a)bε
+        double re = besselY0(a.a());
+        double du = -besselY1(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual besselK1(Dual a) {
+        // k1(a+bε) = k1(a) - bε(k0(a) + k2(a))/2
+        double re = besselK1(a.a());
+        double du = a.b() * -(besselK0(a.a()) + besselKn(2, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
+    public static Dual besselJn(int n, Dual a) {
+        double re = besselJn(n, a.a());
+        double du = a.b() * (besselJn(n - 1, a.a()) - besselJn(n + 1, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
+    public static Dual besselYn(int n, Dual a) {
+        double re = besselYn(n, a.a());
+        double du = a.b() * (besselYn(n - 1, a.a()) - besselYn(n + 1, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
+    public static Dual besselYv(double n, Dual a) {
+        double re = besselYv(n, a.a());
+        double du = a.b() * (besselYv(n - 1, a.a()) - besselYv(n + 1, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
+    public static Dual besselKn(int n, Dual a) {
+        double re = besselKn(n, a.a());
+        double du = a.b() * -(besselKn(n - 1, a.a()) + besselKn(n + 1, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
+    public static Dual besselJv(double n, Dual a) {
+        double re = besselJv(n, a.a());
+        double du = a.b() * (besselJv(n - 1, a.a()) - besselJv(n + 1, a.a())) / 2;
         return new Dual(re, du);
     }
 
@@ -3055,8 +3142,224 @@ public class Maja {
     }
 
     public static Dual dilog(Dual a) {
-        // dilog(a+bε) = dilog(a) + -b*log(1-a)/aε
+        // dilog(a+bε) = dilog(a) + -b*log(1-a)ε/a
         return new Dual(dilog(a.a()), -a.b() * log(1 - a.a()) / a.a());
+    }
+
+    public static Dual acot(Dual a) {
+        // acot(a+bε) = acot(a) - b/(1+a^2)ε
+        double re = acot(a.a());
+        double du = -a.b() / (1 + a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual acoth(Dual a) {
+        // acoth(a+bε) = acoth(a) - b/(1-a^2)ε
+        double re = acoth(a.a());
+        double du = -a.b() / (1 - a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual asec(Dual a) {
+        // asec(a+bε) = asec(a) + b/(a^2 sqrt(1-1/(a^2)))ε
+        double re = asec(a.a());
+        double asq = a.a() * a.a();
+        double du = a.b() / (asq * sqrt(1 - 1 / asq));
+        return new Dual(re, du);
+    }
+
+    public static Dual acsc(Dual a) {
+        // acsc(a+bε) = acsc(a) - b/(a^2 sqrt(1-1/(a^2)))ε
+        double re = acsc(a.a());
+        double asq = a.a() * a.a();
+        double du = -a.b() / (asq * sqrt(1 - 1 / asq));
+        return new Dual(re, du);
+    }
+
+    public static Dual coth(Dual a) {
+        // coth(a+bε) = coth(a) - b/sinh^2(a)ε
+        double re = coth(a.a());
+        double sh = sinh(a.a());
+        double du = -a.b() / (sh * sh);
+        return new Dual(re, du);
+    }
+
+    public static Dual sech(Dual a) {
+        // sech(a+bε) = sech(a) - b*tanh(a)*sech(a)ε
+        double re = sech(a.a());
+        double th = tanh(a.a());
+        double du = -a.b() * th * re;
+        return new Dual(re, du);
+    }
+
+    public static Dual csch(Dual a) {
+        // csch(a+bε) = csch(a) - b*coth(a)*csch(a)ε
+        double re = csch(a.a());
+        double co = coth(a.a());
+        double du = -a.b() * co * re;
+        return new Dual(re, du);
+    }
+
+    public static Dual asinh(Dual a) {
+        // asinh(a+bε) = asinh(a) + b/sqrt(1+a^2)ε
+        double re = asinh(a.a());
+        double du = a.b() / sqrt(1 + a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual acosh(Dual a) {
+        // acosh(a+bε) = acosh(a) + b/(sqrt(a-1)sqrt(a+1))ε
+        double re = acosh(a.a());
+        double du = a.b() / (sqrt(a.a() - 1) * sqrt(a.a() + 1));
+        return new Dual(re, du);
+    }
+
+    public static Dual atanh(Dual a) {
+        // atanh(a+bε) = atanh(a) + b/(1-a^2)ε
+        double re = atanh(a.a());
+        double du = a.b() / (1 - a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual asech(Dual a) {
+        // asech(a+bε) = asech(a) - b/(sqrt(1/a - 1) sqrt(1/a + 1) a^2)ε
+        double re = asech(a.a());
+        double du = -a.b() / (sqrt(1 / a.a() - 1) * sqrt(1 / a.a() + 1) * a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual acsch(Dual a) {
+        // acsch(a+bε) = acsch(a) - b/(sqrt(1+1/a^2) a^2)ε
+        double re = acsch(a.a());
+        double du = -a.b() / (sqrt(1 + 1 / (a.a() * a.a())) * a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual cbrt(Dual a) {
+        // cbrt(a+bε) = cbrt(a) + b/(3 cbrt(a)^2)ε
+        double re = cbrt(a.a());
+        double du = a.b() / (3 * re * re);
+        return new Dual(re, du);
+    }
+
+    /**
+     * Compute the beta function of a dual and real number.
+     * The derivative is taken as d/da beta(a,c).
+     * @param a
+     * @param c
+     * @return
+     */
+    public static Dual beta(Dual a, double c) {
+        // beta(a+bε,c) = beta(a,c) + b(digamma(a) - digamma(a+c))*beta(a,c)ε
+        double re = beta(a.a(), c);
+        double du = a.b() * (digamma(a.a()) - digamma(a.a() + c)) * re;
+        return new Dual(re, du);
+    }
+
+    /**
+     * Compute the beta function of a real and dual number.
+     * The derivative is taken as d/dc beta(a,c).
+     * @param a
+     * @param c
+     * @return
+     */
+    public static Dual beta(double a, Dual c) {
+        // beta(a,c+bε) = beta(a,c) + b(digamma(c) - digamma(a+c))*beta(a,c)ε
+        double re = beta(a, c.a());
+        double du = c.b() * (digamma(c.a()) - digamma(a + c.a())) * re;
+        return new Dual(re, du);
+    }
+
+    public static Dual erfc(Dual a) {
+        // erfc(a+bε) = erfc(a) - 2 b exp(-a^2) / sqrt(π)ε
+        double re = erfc(a.a());
+        double du = -2 * a.b() * exp(-a.a() * a.a()) / 1.7724538509055160272981674833411451827975494561223871282138077898;
+        return new Dual(re, du);
+    }
+
+    public static Dual erfi(Dual a) {
+        // erfi(a+bε) = erfi(a) + 2 b exp(a^2) / sqrt(π)ε
+        double re = erfi(a.a());
+        double du = 2 * a.b() * exp(a.a() * a.a()) / 1.7724538509055160272981674833411451827975494561223871282138077898;
+        return new Dual(re, du);
+    }
+
+    public static Dual fresnelC(Dual a) {
+        // fresnelC(a+bε) = fresnelC(a) + b cos(π a^2/2)ε
+        double re = fresnelC(a.a());
+        double du = a.b() * cos(a.a() * a.a() * PI_2);
+        return new Dual(re, du);
+    }
+
+    public static Dual fresnelS(Dual a) {
+        // fresnelS(a+bε) = fresnelS(a) + b sin(π a^2/2)ε
+        double re = fresnelS(a.a());
+        double du = a.b() * sin(a.a() * a.a() * PI_2);
+        return new Dual(re, du);
+    }
+
+    public static Dual li(Dual a) {
+        // li(a+bε) = li(a) + b/(log(a))ε
+        double re = li(a.a());
+        double du = a.b() / log(a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual sinc(Dual a) {
+        // sinc(a+bε) = sinc(a) + b(a cos(a) - sin(a))ε/a^2
+        double re = sinc(a.a());
+        double du = a.b() * (a.a() * cos(a.a()) - sin(a.a())) / (a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual spence(Dual a) {
+        // spence(a+bε) = spence(a) + b*(log(a)/(1-a))ε
+        double re = spence(a.a());
+        double du = a.b() * log(a.a()) / (1 - a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual trigamma(Dual a) {
+        // trigamma(a+bε) = trigamma(a) + polygamma(2,a)bε
+        double re = trigamma(a.a());
+        double du = polygamma(2, a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual polygamma(double n, Dual a) {
+        // polygamma(n, a+bε) = polygamma(n, a) + polygamma(n+1,a)bε
+        double re = polygamma(n, a.a());
+        double du = polygamma(n + 1, a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual polylog(int n, Dual a) {
+        // polylog(n, a+bε) = polylog(n, a) + polylog(n-1,a)bε/a
+        double re = polylog(n, a.a());
+        double du = polylog(n - 1, a.a()) * a.b() / a.a();
+        return new Dual(re, du);
+    }
+
+    public static Dual lambertW0(Dual a) {
+        // W(a+bε) = W(a) + bεW(a)/(a(1+W(a)))
+        double re = lambertW0(a.a());
+        double du = a.b() * re / (a.a() * (1 + lambertW0(re)));
+        return new Dual(re, du);
+    }
+
+    public static Dual lambertWm1(Dual a) {
+        // W(a+bε) = W(a) + bεW(a)/(a(1+W(a)))
+        double re = lambertWm1(a.a());
+        double du = a.b() * re / (a.a() * (1 + lambertWm1(re)));
+        return new Dual(re, du);
+    }
+
+    public static Dual hurwitzZeta(double s, Dual a) {
+        // hurwitz(s, a+bε) = hurwitz(s, a) -s hurwitz(s+1,a)bε
+        // Dunno about the d/da.
+        double re = hurwitzZeta(s, a.a());
+        double du = -s * hurwitzZeta(s + 1, a.a()) * a.b();
+        return new Dual(re, du);
     }
 
     /**
