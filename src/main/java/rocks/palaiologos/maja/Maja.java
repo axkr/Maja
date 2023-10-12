@@ -2825,6 +2825,24 @@ public class Maja {
     }
 
     /**
+     * Computes the Arithmetic-Geometric mean.
+     * @param a
+     * @param g
+     * @return the Arithmetic-Geometric mean of a and g
+     */
+    public static double agm(double a, double g) {
+        double a1 = a;
+        double g1 = g;
+        while (Math.abs(a1 - g1) >= 1.0e-14) {
+            double a2 = (a1 + g1) / 2.0;
+            double g2 = Math.sqrt(a1 * g1);
+            a1 = a2;
+            g1 = g2;
+        }
+        return a1;
+    }
+
+    /**
      * Add two complex numbers together.
      *
      * @param a
