@@ -7,7 +7,47 @@ package rocks.palaiologos.maja.matrix;
  * @param spd Whether the matrix is symmetric positive definite.
  * @author Palaiologos
  */
-public record DoubleCholeskyDecompositonResult(DoubleMatrix l, boolean spd) {
+
+import java.util.Objects;
+
+public final class DoubleCholeskyDecompositonResult {
+    private final DoubleMatrix l;
+    private final boolean spd;
+
+    DoubleCholeskyDecompositonResult(DoubleMatrix l, boolean spd) {
+        this.l = l;
+        this.spd = spd;
+    }
+
+    public DoubleMatrix l() {
+        return l;
+    }
+
+    public boolean spd() {
+        return spd;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        DoubleCholeskyDecompositonResult that = (DoubleCholeskyDecompositonResult) obj;
+        return Objects.equals(this.l, that.l) &&
+                this.spd == that.spd;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(l, spd);
+    }
+
+    @Override
+    public String toString() {
+        return "DoubleCholeskyDecompositonResult[" +
+                "l=" + l + ", " +
+                "spd=" + spd + ']';
+    }
+
     /**
      * Solve A * X = B.
      *

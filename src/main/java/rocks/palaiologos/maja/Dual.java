@@ -6,6 +6,10 @@ package rocks.palaiologos.maja;
  * @param a real part
  * @param b dual part
  */
+
+import com.github.bsideup.jabel.Desugar;
+
+@Desugar
 public record Dual(double a, double b) {
     public static final Dual NaN = new Dual(Double.NaN);
     public static final Dual INFINITY = new Dual(Double.POSITIVE_INFINITY);

@@ -5,7 +5,9 @@ import rocks.palaiologos.maja.matrix.DoubleMatrix;
 import rocks.palaiologos.maja.matrix.DoubleSVDResult;
 import rocks.palaiologos.maja.matrix.Matrix;
 
+import java.util.AbstractList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -144,6 +146,20 @@ public class TestMatrix {
         assertThat(b.has(new Complex(1, 2))).isFalse();
     }
 
+    private static <E> List<E> of(E... elements) {
+        return new AbstractList<E>() {
+            @Override
+            public E get(int index) {
+                return elements[index];
+            }
+
+            @Override
+            public int size() {
+                return elements.length;
+            }
+        };
+    }
+
     @Test
     public void testRavel() {
         Matrix<Complex> a = new Matrix<>(new Complex[][]{
@@ -151,12 +167,7 @@ public class TestMatrix {
                 {new Complex(5, 6), new Complex(7, 8)}
         });
 
-        List<Complex> expectedRavel = List.of(
-                new Complex(1, 2),
-                new Complex(3, 4),
-                new Complex(5, 6),
-                new Complex(7, 8)
-        );
+        List<Complex> expectedRavel = of(new Complex(1, 2), new Complex(3, 4), new Complex(5, 6), new Complex(7, 8));
 
         assertThat(a.ravel()).isEqualTo(expectedRavel);
     }
