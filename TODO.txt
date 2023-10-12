@@ -1,2 +1,34 @@
 
-More dual numbers.
+Implemented Duals:
+- add
+- sub
+- mul
+- div
+- sin
+- sec
+- cos
+- csc
+- tan
+- cot
+- exp
+- log
+- pow
+- abs
+- asin
+- acos
+- atan
+- sqrt
+- sinh
+- cosh
+- tanh
+- gamma
+- digamma
+- airyAi
+- airyBi
+- Chi
+- Shi
+- Ci
+- Si
+- Ei
+- erf
+- dilog
