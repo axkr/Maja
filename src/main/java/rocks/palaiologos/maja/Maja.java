@@ -2774,8 +2774,8 @@ public class Maja {
             if (eq(d, Complex.ZERO)) {
                 // One root.
                 Complex x = div(negate(b), mul(a, 2));
-                coefficients[0] = x;
-                return new boolean[]{ false, true };
+                coefficients[0] = coefficients[1] = x;
+                return new boolean[]{ false, false };
             } else {
                 // Two roots.
                 Complex x1 = div(add(negate(b), d), mul(a, 2));
