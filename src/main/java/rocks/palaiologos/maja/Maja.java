@@ -3007,6 +3007,7 @@ public class Maja {
     }
 
     public static Dual gamma(Dual a) {
+        // gamma'(f(x)) = f'(x)Γ(f(x))ψ(f(x)):
         // gamma(a+bε) = gamma(a) + gamma(a)ψ(a)bε
         double re = gamma(a.a());
         double du = gamma(a.a()) * digamma(a.a()) * a.b();
@@ -3071,6 +3072,60 @@ public class Maja {
     public static Dual dilog(Dual a) {
         // dilog(a+bε) = dilog(a) + -b*log(1-a)/aε
         return new Dual(dilog(a.a()), -a.b() * log(1 - a.a()) / a.a());
+    }
+
+    public static Dual acot(Dual a) {
+        // acot(a+bε) = acot(a) - b/(1+a^2)ε
+        double re = acot(a.a());
+        double du = -a.b() / (1 + a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual acoth(Dual a) {
+        // acoth(a+bε) = acoth(a) - b/(1-a^2)ε
+        double re = acoth(a.a());
+        double du = -a.b() / (1 - a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual asec(Dual a) {
+        // asec(a+bε) = asec(a) + b/(a^2 sqrt(1-1/(a^2)))ε
+        double re = asec(a.a());
+        double asq = a.a() * a.a();
+        double du = a.b() / (asq * sqrt(1 - 1 / asq));
+        return new Dual(re, du);
+    }
+
+    public static Dual acsc(Dual a) {
+        // acsc(a+bε) = acsc(a) - b/(a^2 sqrt(1-1/(a^2)))ε
+        double re = acsc(a.a());
+        double asq = a.a() * a.a();
+        double du = -a.b() / (asq * sqrt(1 - 1 / asq));
+        return new Dual(re, du);
+    }
+
+    public static Dual coth(Dual a) {
+        // coth(a+bε) = coth(a) - b/sinh^2(a)ε
+        double re = coth(a.a());
+        double sh = sinh(a.a());
+        double du = -a.b() / (sh * sh);
+        return new Dual(re, du);
+    }
+
+    public static Dual sech(Dual a) {
+        // sech(a+bε) = sech(a) - b*tanh(a)*sech(a)ε
+        double re = sech(a.a());
+        double th = tanh(a.a());
+        double du = -a.b() * th * re;
+        return new Dual(re, du);
+    }
+
+    public static Dual csch(Dual a) {
+        // csch(a+bε) = csch(a) - b*coth(a)*csch(a)ε
+        double re = csch(a.a());
+        double co = coth(a.a());
+        double du = -a.b() * co * re;
+        return new Dual(re, du);
     }
 
     /**

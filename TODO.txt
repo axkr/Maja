@@ -32,3 +32,34 @@ Implemented Duals:
 - Ei
 - erf
 - dilog
+
+Todo:
+- asinh
+- acosh
+- atanh
+- asech
+- acsch
+- Bessel I0, I1, J0, J1, Jn, Jv,
+         K0, K1, Kn, Y0, Y1, Yn, Yv
+- beta
+- cbrt
+- cis
+- erfc
+- erfi
+- Ei
+- fresnelC, fresnelS
+- hurwitz, riemann zeta
+- hypergeo: 1f1, 1f2, 2f1, 3f0.
+- LambertW0 LambertWM1
+- li
+- polygamma
+- polylog
+- sinc
+- spence
+- struve: l0, l1
+- trigamma
+
+by the rule:
+
+Γ'(f(x)) = f'(x)Γ(f(x))ψ(f(x)):
+Γ(a+bε) = Γ(a) + Γ(a)ψ(a)bε
