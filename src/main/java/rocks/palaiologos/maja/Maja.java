@@ -3163,6 +3163,41 @@ public class Maja {
         return new Dual(re, du);
     }
 
+    public static Dual cbrt(Dual a) {
+        // cbrt(a+bε) = cbrt(a) + b/(3 cbrt(a)^2)ε
+        double re = cbrt(a.a());
+        double du = a.b() / (3 * re * re);
+        return new Dual(re, du);
+    }
+
+    /**
+     * Compute the beta function of a dual and real number.
+     * The derivative is taken as d/da beta(a,c).
+     * @param a
+     * @param c
+     * @return
+     */
+    public static Dual beta(Dual a, double c) {
+        // beta(a+bε,c) = beta(a,c) + b(digamma(a) - digamma(a+c))*beta(a,c)ε
+        double re = beta(a.a(), c);
+        double du = a.b() * (digamma(a.a()) - digamma(a.a() + c)) * re;
+        return new Dual(re, du);
+    }
+
+    /**
+     * Compute the beta function of a real and dual number.
+     * The derivative is taken as d/dc beta(a,c).
+     * @param a
+     * @param c
+     * @return
+     */
+    public static Dual beta(double a, Dual c) {
+        // beta(a,c+bε) = beta(a,c) + b(digamma(c) - digamma(a+c))*beta(a,c)ε
+        double re = beta(a, c.a());
+        double du = c.b() * (digamma(c.a()) - digamma(a + c.a())) * re;
+        return new Dual(re, du);
+    }
+
     /**
      * Add a complex number and a real number.
      *
