@@ -34,8 +34,6 @@ Implemented Duals:
 - dilog
 
 Todo:
-- Bessel I0, I1, J0, J1, Jn, Jv,
-         K0, K1, Kn, Y0, Y1, Yn, Yv
 - hurwitz, riemann zeta
 - hypergeo: 1f1, 1f2, 2f1, 3f0
 - struve: l0, l1

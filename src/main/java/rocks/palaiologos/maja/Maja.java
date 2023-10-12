@@ -3021,6 +3021,78 @@ public class Maja {
         return new Dual(re, du);
     }
 
+    public static Dual besselI0(Dual a) {
+        // i0(a+bε) = i0(a) + i1(a)bε
+        double re = besselI0(a.a());
+        double du = besselI1(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual besselJ0(Dual a) {
+        // j0(a+bε) = j0(a) - j1(a)bε
+        double re = besselJ0(a.a());
+        double du = -besselJ1(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual besselK0(Dual a) {
+        // k0(a+bε) = k0(a) - k1(a)bε
+        double re = besselK0(a.a());
+        double du = -besselK1(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual besselJ1(Dual a) {
+        // j1(a+bε) = j1(a) + bε(j0(a) - j2(a))/2
+        double re = besselJ1(a.a());
+        double du = a.b() * (besselJ0(a.a()) - besselJn(2, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
+    public static Dual besselY0(Dual a) {
+        // y0(a+bε) = y0(a) - y1(a)bε
+        double re = besselY0(a.a());
+        double du = -besselY1(a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual besselK1(Dual a) {
+        // k1(a+bε) = k1(a) - bε(k0(a) + k2(a))/2
+        double re = besselK1(a.a());
+        double du = a.b() * -(besselK0(a.a()) + besselKn(2, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
+    public static Dual besselJn(int n, Dual a) {
+        double re = besselJn(n, a.a());
+        double du = a.b() * (besselJn(n - 1, a.a()) - besselJn(n + 1, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
+    public static Dual besselYn(int n, Dual a) {
+        double re = besselYn(n, a.a());
+        double du = a.b() * (besselYn(n - 1, a.a()) - besselYn(n + 1, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
+    public static Dual besselYv(double n, Dual a) {
+        double re = besselYv(n, a.a());
+        double du = a.b() * (besselYv(n - 1, a.a()) - besselYv(n + 1, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
+    public static Dual besselKn(int n, Dual a) {
+        double re = besselKn(n, a.a());
+        double du = a.b() * -(besselKn(n - 1, a.a()) + besselKn(n + 1, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
+    public static Dual besselJv(double n, Dual a) {
+        double re = besselJv(n, a.a());
+        double du = a.b() * (besselJv(n - 1, a.a()) - besselJv(n + 1, a.a())) / 2;
+        return new Dual(re, du);
+    }
+
     public static Dual airyAi(Dual a) {
         double[] r = airy(a.a());
         return new Dual(r[0], r[1] * a.b());
@@ -3279,6 +3351,14 @@ public class Maja {
         // W(a+bε) = W(a) + bεW(a)/(a(1+W(a)))
         double re = lambertWm1(a.a());
         double du = a.b() * re / (a.a() * (1 + lambertWm1(re)));
+        return new Dual(re, du);
+    }
+
+    public static Dual hurwitzZeta(double s, Dual a) {
+        // hurwitz(s, a+bε) = hurwitz(s, a) -s hurwitz(s+1,a)bε
+        // Dunno about the d/da.
+        double re = hurwitzZeta(s, a.a());
+        double du = -s * hurwitzZeta(s + 1, a.a()) * a.b();
         return new Dual(re, du);
     }
 
