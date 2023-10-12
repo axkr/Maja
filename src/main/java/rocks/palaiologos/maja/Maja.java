@@ -3070,7 +3070,7 @@ public class Maja {
     }
 
     public static Dual dilog(Dual a) {
-        // dilog(a+bε) = dilog(a) + -b*log(1-a)/aε
+        // dilog(a+bε) = dilog(a) + -b*log(1-a)ε/a
         return new Dual(dilog(a.a()), -a.b() * log(1 - a.a()) / a.a());
     }
 
@@ -3195,6 +3195,90 @@ public class Maja {
         // beta(a,c+bε) = beta(a,c) + b(digamma(c) - digamma(a+c))*beta(a,c)ε
         double re = beta(a, c.a());
         double du = c.b() * (digamma(c.a()) - digamma(a + c.a())) * re;
+        return new Dual(re, du);
+    }
+
+    public static Dual erfc(Dual a) {
+        // erfc(a+bε) = erfc(a) - 2 b exp(-a^2) / sqrt(π)ε
+        double re = erfc(a.a());
+        double du = -2 * a.b() * exp(-a.a() * a.a()) / 1.7724538509055160272981674833411451827975494561223871282138077898;
+        return new Dual(re, du);
+    }
+
+    public static Dual erfi(Dual a) {
+        // erfi(a+bε) = erfi(a) + 2 b exp(a^2) / sqrt(π)ε
+        double re = erfi(a.a());
+        double du = 2 * a.b() * exp(a.a() * a.a()) / 1.7724538509055160272981674833411451827975494561223871282138077898;
+        return new Dual(re, du);
+    }
+
+    public static Dual fresnelC(Dual a) {
+        // fresnelC(a+bε) = fresnelC(a) + b cos(π a^2/2)ε
+        double re = fresnelC(a.a());
+        double du = a.b() * cos(a.a() * a.a() * PI_2);
+        return new Dual(re, du);
+    }
+
+    public static Dual fresnelS(Dual a) {
+        // fresnelS(a+bε) = fresnelS(a) + b sin(π a^2/2)ε
+        double re = fresnelS(a.a());
+        double du = a.b() * sin(a.a() * a.a() * PI_2);
+        return new Dual(re, du);
+    }
+
+    public static Dual li(Dual a) {
+        // li(a+bε) = li(a) + b/(log(a))ε
+        double re = li(a.a());
+        double du = a.b() / log(a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual sinc(Dual a) {
+        // sinc(a+bε) = sinc(a) + b(a cos(a) - sin(a))ε/a^2
+        double re = sinc(a.a());
+        double du = a.b() * (a.a() * cos(a.a()) - sin(a.a())) / (a.a() * a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual spence(Dual a) {
+        // spence(a+bε) = spence(a) + b*(log(a)/(1-a))ε
+        double re = spence(a.a());
+        double du = a.b() * log(a.a()) / (1 - a.a());
+        return new Dual(re, du);
+    }
+
+    public static Dual trigamma(Dual a) {
+        // trigamma(a+bε) = trigamma(a) + polygamma(2,a)bε
+        double re = trigamma(a.a());
+        double du = polygamma(2, a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual polygamma(double n, Dual a) {
+        // polygamma(n, a+bε) = polygamma(n, a) + polygamma(n+1,a)bε
+        double re = polygamma(n, a.a());
+        double du = polygamma(n + 1, a.a()) * a.b();
+        return new Dual(re, du);
+    }
+
+    public static Dual polylog(int n, Dual a) {
+        // polylog(n, a+bε) = polylog(n, a) + polylog(n-1,a)bε/a
+        double re = polylog(n, a.a());
+        double du = polylog(n - 1, a.a()) * a.b() / a.a();
+        return new Dual(re, du);
+    }
+
+    public static Dual lambertW0(Dual a) {
+        // W(a+bε) = W(a) + bεW(a)/(a(1+W(a)))
+        double re = lambertW0(a.a());
+        double du = a.b() * re / (a.a() * (1 + lambertW0(re)));
+        return new Dual(re, du);
+    }
+
+    public static Dual lambertWm1(Dual a) {
+        // W(a+bε) = W(a) + bεW(a)/(a(1+W(a)))
+        double re = lambertWm1(a.a());
+        double du = a.b() * re / (a.a() * (1 + lambertWm1(re)));
         return new Dual(re, du);
     }
 
