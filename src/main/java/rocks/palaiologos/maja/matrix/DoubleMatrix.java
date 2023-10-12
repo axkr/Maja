@@ -786,4 +786,9 @@ public class DoubleMatrix extends Matrix<Double> {
         }
         return result;
     }
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
 }

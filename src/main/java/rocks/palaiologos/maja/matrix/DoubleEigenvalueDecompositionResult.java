@@ -20,5 +20,7 @@ import rocks.palaiologos.maja.Complex;
  * The complex eigenvalues are stored in a Complex array 'e'.
  * @author Palaiologos
  */
+import com.github.bsideup.jabel.Desugar;
+@Desugar
 public record DoubleEigenvalueDecompositionResult(DoubleMatrix V, DoubleMatrix D, Complex[] e) {
 }

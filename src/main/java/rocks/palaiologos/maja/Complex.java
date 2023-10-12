@@ -6,6 +6,10 @@ package rocks.palaiologos.maja;
  * @param re real part
  * @param im imaginary part
  */
+
+import com.github.bsideup.jabel.Desugar;
+
+@Desugar
 public record Complex(double re, double im) {
     public static final Complex NaN = new Complex(Double.NaN, Double.NaN);
     public static final Complex COMPLEX_INFINITY = new Complex(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);

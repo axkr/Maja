@@ -454,6 +454,13 @@ public class Matrix<T> {
         return false;
     }
 
+    private static String repeat(String s, int n) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++)
+            sb.append(s);
+        return sb.toString();
+    }
+
     @Override
     public String toString() {
         List<List<String>> stringData = new ArrayList<>();
@@ -505,18 +512,18 @@ public class Matrix<T> {
                 StringBuilder sb = new StringBuilder();
                 for (String line : element.split("\n")) {
                     sb.append(line);
-                    sb.append(" ".repeat(Math.max(0, columnWidth - line.length())));
+                    sb.append(repeat(" ", Math.max(0, columnWidth - line.length())));
                     sb.append('\n');
                 }
-                String emptyLine = " ".repeat(columnWidth) + '\n';
-                sb.append(emptyLine.repeat(Math.max(0, rowHeight - linefeeds)));
+                String emptyLine = repeat(" ", columnWidth) + '\n';
+                sb.append(repeat(emptyLine, Math.max(0, rowHeight - linefeeds)));
                 stringData.get(i).set(j, sb.toString());
             }
         }
 
         StringBuilder sb = new StringBuilder();
         sb.append("+");
-        for (int columnWidth : columnWidths) sb.append("-".repeat(columnWidth + 2)).append("+");
+        for (int columnWidth : columnWidths) sb.append(repeat("-", columnWidth + 2)).append("+");
         sb.append("\n");
         for (int i = 0; i < stringData.size(); i++) {
             for (int line = 0; line < rowHeights[i]; line++) {
@@ -527,13 +534,13 @@ public class Matrix<T> {
                     if (line < lines.length)
                         sb.append(" ").append(lines[line]).append(" |");
                     else
-                        sb.append(" ".repeat(columnWidths[j] + 2)).append("|");
+                        sb.append(repeat(" ", columnWidths[j] + 2)).append("|");
                 }
                 sb.append("\n");
             }
             sb.append("+");
             for (int j = 0; j < stringData.get(i).size(); j++)
-                sb.append("-".repeat(columnWidths[j] + 2)).append("+");
+                sb.append(repeat("-", columnWidths[j] + 2)).append("+");
             sb.append("\n");
         }
         return sb.toString();

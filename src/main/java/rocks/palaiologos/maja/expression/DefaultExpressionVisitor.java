@@ -8,11 +8,60 @@ import rocks.palaiologos.maja.matrix.ComplexMatrix;
 import rocks.palaiologos.maja.matrix.DoubleMatrix;
 import rocks.palaiologos.maja.matrix.Matrix;
 
+import java.util.AbstractList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implements ExpressionVisitor<Object> {
     private Environment env;
+
+    static <E> List<E> of(E e1) {
+        return new AbstractList<E>() {
+            @Override
+            public E get(int index) {
+                if(index != 0)
+                    throw new IndexOutOfBoundsException();
+                return e1;
+            }
+
+            @Override
+            public int size() {
+                return 1;
+            }
+        };
+    }
+
+    static <E> List<E> of(E e1, E e2) {
+        return new AbstractList<E>() {
+            @Override
+            public E get(int index) {
+                if(index >= 2)
+                    throw new IndexOutOfBoundsException();
+                return index == 0 ? e1 : e2;
+            }
+
+            @Override
+            public int size() {
+                return 2;
+            }
+        };
+    }
+
+    static List<String> of(String... e) {
+        return new AbstractList<String>() {
+            @Override
+            public String get(int index) {
+                if(index >= e.length)
+                    throw new IndexOutOfBoundsException();
+                return e[index];
+            }
+
+            @Override
+            public int size() {
+                return e.length;
+            }
+        };
+    }
 
     private Environment getEnv() {
         return env;
@@ -70,7 +119,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("sin", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -95,7 +144,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("cos", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -120,7 +169,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("tan", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -145,7 +194,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("cot", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -170,7 +219,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("sec", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -195,7 +244,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("csc", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -221,7 +270,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("asin", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -246,7 +295,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("acos", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -271,7 +320,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("atan", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -296,7 +345,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("acot", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -321,7 +370,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("asec", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -346,7 +395,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("acsc", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -372,7 +421,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("sinh", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -397,7 +446,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("cosh", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -422,7 +471,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("tanh", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -447,7 +496,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("coth", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -472,7 +521,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("sech", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -497,7 +546,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("csch", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -523,7 +572,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("asinh", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -548,7 +597,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("acosh", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -573,7 +622,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("atanh", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -598,7 +647,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("acoth", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -623,7 +672,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("asech", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -648,7 +697,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("acsch", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -674,7 +723,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("min", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -707,7 +756,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("max", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -740,7 +789,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("abs", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -765,7 +814,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("signum", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -791,7 +840,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("exp", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -816,7 +865,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("ln", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -856,7 +905,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("log10", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -877,7 +926,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("log2", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -898,7 +947,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("log1p", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -919,7 +968,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("sqrt", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -957,7 +1006,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("cbrt", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -995,7 +1044,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("hypot", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -1029,7 +1078,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("ceil", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1054,7 +1103,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("floor", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1079,7 +1128,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("round", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1105,7 +1154,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("atan2", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -1134,7 +1183,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("sinc", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1159,7 +1208,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("rad", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1180,7 +1229,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("deg", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1201,7 +1250,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("ulp", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1220,7 +1269,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("scalb", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -1239,7 +1288,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("copysign", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -1280,7 +1329,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("getexp", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1299,7 +1348,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("rand", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("begin", "end");
+                return of("begin", "end");
             }
 
             @Override
@@ -1328,7 +1377,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("compare", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -1357,7 +1406,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("approx_eq", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y", "tol");
+                return of("x", "y", "tol");
             }
 
             @Override
@@ -1446,7 +1495,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("is_perfect_square", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("n");
+                return of("n");
             }
 
             @Override
@@ -1463,7 +1512,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("linear_map", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a_begin", "a_end", "b_begin", "b_end", "value");
+                return of("a_begin", "a_end", "b_begin", "b_end", "value");
             }
 
             @Override
@@ -1480,7 +1529,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("linear_norm", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("begin", "end", "value");
+                return of("begin", "end", "value");
             }
 
             @Override
@@ -1495,7 +1544,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("linear_interpolate", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("begin", "end", "value");
+                return of("begin", "end", "value");
             }
 
             @Override
@@ -1510,7 +1559,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("clamp", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("begin", "end", "value");
+                return of("begin", "end", "value");
             }
 
             @Override
@@ -1529,7 +1578,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("is_power_of_2", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1546,7 +1595,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("next_power_of_2", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1563,7 +1612,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("fast_sin", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1584,7 +1633,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("fast_cos", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1606,7 +1655,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("isqrt", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1627,7 +1676,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("ilog10", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1647,7 +1696,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("iexp", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -1662,7 +1711,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("icbrt", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -1683,7 +1732,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("airy_ai", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -1721,7 +1770,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("airy_bi", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -1759,7 +1808,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("airy_aip", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -1797,7 +1846,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("airy_bip", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -1835,7 +1884,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("gamma", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -1873,7 +1922,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("loggamma", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -1911,7 +1960,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("digamma", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -1949,7 +1998,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("trigamma", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -1987,7 +2036,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("uigamma", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             private Object transform(Object x, Object y) {
@@ -2029,7 +2078,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("ligamma", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             private Object transform(Object x, Object y) {
@@ -2071,7 +2120,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("pochhammer", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             private Object transform(Object x, Object y) {
@@ -2113,7 +2162,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("Ei", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2151,7 +2200,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("E1", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -2170,7 +2219,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("En", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -2194,7 +2243,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("zeta", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2232,7 +2281,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("hurwitz_zeta", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             private Object transform(Object x, Object y) {
@@ -2274,7 +2323,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("lerch_phi", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("z", "s", "a");
+                return of("z", "s", "a");
             }
 
             @Override
@@ -2301,7 +2350,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("polygamma", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             private Object transform(Object x, Object y) {
@@ -2343,7 +2392,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("beta", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             private Object transform(Object x, Object y) {
@@ -2385,7 +2434,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("logbeta", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             private Object transform(Object x, Object y) {
@@ -2427,7 +2476,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("dilog", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2465,7 +2514,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("spence", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2503,7 +2552,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("polylog", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             private Object transform(Object x, Object y) {
@@ -2545,7 +2594,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("lambertW0", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2583,7 +2632,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("lambertWM1", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2621,7 +2670,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         env.set("lambertW", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             private Object transform(Object x, Object y) {
@@ -2670,7 +2719,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("dawson_plus", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2708,7 +2757,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("dawson_minus", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2746,7 +2795,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("chop", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -2765,7 +2814,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("erf", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2803,7 +2852,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("erfi", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2841,7 +2890,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("erfc", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2880,7 +2929,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("stretch", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -2899,7 +2948,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("squash", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -2918,7 +2967,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("Si", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2956,7 +3005,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("Ci", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -2994,7 +3043,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("si", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -3032,7 +3081,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("Cin", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -3070,7 +3119,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("Shi", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -3108,7 +3157,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("Chi", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -3146,7 +3195,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("fresnelC", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -3184,7 +3233,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("fresnelS", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             private Object transform(Object x) {
@@ -3222,7 +3271,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("y0", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3241,7 +3290,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("y1", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3260,7 +3309,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("yn", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("n", "x");
+                return of("n", "x");
             }
 
             @Override
@@ -3284,7 +3333,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("j0", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3303,7 +3352,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("j1", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3322,7 +3371,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("jn", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("n", "x");
+                return of("n", "x");
             }
 
             @Override
@@ -3346,7 +3395,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("i0", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3365,7 +3414,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("i1", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3384,7 +3433,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("k0", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3403,7 +3452,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("k1", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3422,7 +3471,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("kn", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("n", "x");
+                return of("n", "x");
             }
 
             @Override
@@ -3446,7 +3495,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("fib", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3463,7 +3512,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("factorial", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3478,7 +3527,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("hypergeo2F1", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a", "b", "c", "z");
+                return of("a", "b", "c", "z");
             }
 
             @Override
@@ -3494,7 +3543,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("hypergeo1F1", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a", "b", "z");
+                return of("a", "b", "z");
             }
 
             @Override
@@ -3510,7 +3559,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("hypergeo3F0", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a", "b", "c", "z");
+                return of("a", "b", "c", "z");
             }
 
             @Override
@@ -3526,7 +3575,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("hypergeo1F2", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a", "b", "c", "z");
+                return of("a", "b", "c", "z");
             }
 
             @Override
@@ -3542,7 +3591,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("struve", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -3565,7 +3614,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("jv", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -3588,7 +3637,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("yv", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -3611,7 +3660,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("binomial", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("n", "k");
+                return of("n", "k");
             }
 
             @Override
@@ -3627,7 +3676,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("legendreE", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             private Object transform(Object x, Object y) {
@@ -3669,7 +3718,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("legendreF", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             private Object transform(Object x, Object y) {
@@ -3711,7 +3760,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("legendrePi", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y", "k");
+                return of("x", "y", "k");
             }
 
             private Object transform(Object x, Object y, Object z) {
@@ -3742,7 +3791,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("legendreD", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             private Object transform(Object x, Object y) {
@@ -3784,7 +3833,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("gammaP", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -3807,7 +3856,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("gammaQ", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y");
+                return of("x", "y");
             }
 
             @Override
@@ -3830,7 +3879,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("landau1", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3849,7 +3898,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("norm_quantile", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3868,7 +3917,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("landau4", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "y", "z", "f");
+                return of("x", "y", "z", "f");
             }
 
             @Override
@@ -3886,7 +3935,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("map", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x", "f");
+                return of("x", "f");
             }
 
             @Override
@@ -3912,7 +3961,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("reverse_first", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3927,7 +3976,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("reverse_last", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3942,7 +3991,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("width", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3957,7 +4006,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("height", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3972,7 +4021,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("transpose", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("x");
+                return of("x");
             }
 
             @Override
@@ -3987,7 +4036,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("integrate_rgl", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a", "b", "f", "N");
+                return of("a", "b", "f", "N");
             }
 
             @Override
@@ -4013,7 +4062,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("integrate_rcgl", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a", "b", "f", "N");
+                return of("a", "b", "f", "N");
             }
 
             @Override
@@ -4039,7 +4088,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("integrate_cgl", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a", "b", "f", "N");
+                return of("a", "b", "f", "N");
             }
 
             @Override
@@ -4064,7 +4113,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("integrate_rs", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a", "b", "f", "N");
+                return of("a", "b", "f", "N");
             }
 
             @Override
@@ -4090,7 +4139,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("integrate_rcs", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a", "b", "f", "N");
+                return of("a", "b", "f", "N");
             }
 
             @Override
@@ -4117,7 +4166,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("integrate_rts", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a", "b", "f", "N", "eps");
+                return of("a", "b", "f", "N", "eps");
             }
 
             @Override
@@ -4143,7 +4192,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("integrate_rcts", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a", "b", "f", "N", "eps");
+                return of("a", "b", "f", "N", "eps");
             }
 
             @Override
@@ -4169,7 +4218,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
         this.env.set("integrate_cts", new ExpressionFunction() {
             @Override
             public List<String> params() {
-                return List.of("a", "b", "f", "N", "eps");
+                return of("a", "b", "f", "N", "eps");
             }
 
             @Override
@@ -4296,7 +4345,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
 
     @Override
     public Object visitSimpleFunctionDeclaration(ExpressionParser.SimpleFunctionDeclarationContext ctx) {
-        List<String> args = ctx.ID().stream().skip(1).map(ParseTree::getText).toList();
+        List<String> args = ctx.ID().stream().skip(1).map(ParseTree::getText).collect(Collectors.toList());
         var f = new ExpressionFunction() {
             @Override
             public List<String> params() {
@@ -4314,7 +4363,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
 
     @Override
     public Object visitFunctionDeclaration(ExpressionParser.FunctionDeclarationContext ctx) {
-        List<String> args = ctx.ID().stream().skip(1).map(ParseTree::getText).toList();
+        List<String> args = ctx.ID().stream().skip(1).map(ParseTree::getText).collect(Collectors.toList());
         var f = new ExpressionFunction() {
             @Override
             public List<String> params() {
@@ -4339,7 +4388,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
 
     @Override
     public Object visitSimpleLocalFunctionDeclaration(ExpressionParser.SimpleLocalFunctionDeclarationContext ctx) {
-        List<String> args = ctx.ID().stream().skip(1).map(ParseTree::getText).toList();
+        List<String> args = ctx.ID().stream().skip(1).map(ParseTree::getText).collect(Collectors.toList());
         var f = new ExpressionFunction() {
             @Override
             public List<String> params() {
@@ -4357,7 +4406,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
 
     @Override
     public Object visitLocalFunctionDeclaration(ExpressionParser.LocalFunctionDeclarationContext ctx) {
-        List<String> args = ctx.ID().stream().skip(1).map(ParseTree::getText).toList();
+        List<String> args = ctx.ID().stream().skip(1).map(ParseTree::getText).collect(Collectors.toList());
         var f = new ExpressionFunction() {
             @Override
             public List<String> params() {

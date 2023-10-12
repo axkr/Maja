@@ -12,6 +12,10 @@ package rocks.palaiologos.maja.matrix;
  * @param V The right singular vectors.
  * @author Palaiologos
  */
+
+import com.github.bsideup.jabel.Desugar;
+
+@Desugar
 public record DoubleSVDResult(int rank, double norm, double conditionNumber, double inverseConditionNumber, double[] singularValues,
                               DoubleMatrix U, DoubleMatrix V) {
 }
