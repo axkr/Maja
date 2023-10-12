@@ -53,6 +53,11 @@ Real Functions:
 - Bernoulli numbers bounding.
 - Dual numbers for real automatic differentiation.
 - Struve functions (H0, H1, Hx for double precision x, L0, L1)
+- Arithmetic-geometric mean.
+- Anger and Weber's functions.
+- Polynomial solving via the Aberth method.
+- Lommel functions
+- Legendre polynomials.
 
 Complex functions:
 - Elementary (add, sub, mul, div, conj, abs, sqrt, exp, log, eq, ne, cbrt, root)
@@ -69,12 +74,17 @@ Complex functions:
 - Numerical integration (Simpson, Tanh-Sinh, Gauss-Legendre), contour integration.
 - Lambert W.
 - Abreth method for polynomial equation solving.
+- Anger and Weber's functions.
 
 Linear algebra:
 - Matrix operations: transposition, obtaining rows, columns, generalised dot product, leading/trailing axis reduction, cell mapping, ravelling, robust stringification. Reversing alongside leading and trailing axis, zipping matrices.
 - Real Cholesky, Eigenvalue and Eigenvector, QR, SV, LU and LUP decomposition, trace, determinant, permanent, alternant computation.
 - Specialised code for 1x1...4x4 matrices.
 - Solvers for linear systems using Cholesky, LUP and QR decompositions (least squares).
+
+Dual Numbers:
+- Real automatic differentiation.
+- Supports all trigonometric functions from Maja and a lot of special other functions.
 
 Also, a simple expression evaluator (with operator precedence, grouping, variables, special syntax, etc...).
 

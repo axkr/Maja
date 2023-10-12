@@ -2842,6 +2842,51 @@ public class Maja {
         return a1;
     }
 
+    // TODO: Document.
+
+    public static double fac2(double a) {
+        // x!! = 2^(x/2) (pi/2)^((cos(pi x)-1)/4) gamma(x/2+1).
+        double x = pow(2, a/2);
+        double b = pow(PI_2, (cos(PI * a) - 1) / 4);
+        double c = gamma((a + 1) / 2);
+        return x * b * c;
+    }
+
+    public static double angerJ(double v, double z) {
+        return 0.3183098861837906715377675267450287240689192914809128974953346881
+                * integrateTanhSinhReal(x -> cos(v * x - z * sin(x)), 0, PI, 7, 1.0e-11)[0];
+    }
+
+    public static double weberE(double v, double z) {
+        return 0.3183098861837906715377675267450287240689192914809128974953346881
+                * integrateTanhSinhReal(x -> sin(v * x - z * sin(x)), 0, PI, 7, 1.0e-11)[0];
+    }
+
+    public static Complex angerJ(Complex v, Complex z) {
+        return mul(0.3183098861837906715377675267450287240689192914809128974953346881,
+                 integrateTanhSinhRC(x -> cos(sub(mul(v, x), mul(z, sin(x)))), 0, PI, 7, 1.0e-11)[0]);
+    }
+
+    public static Complex weberE(Complex v, Complex z) {
+        return mul(0.3183098861837906715377675267450287240689192914809128974953346881,
+                integrateTanhSinhRC(x -> sin(sub(mul(v, x), mul(z, sin(x)))), 0, PI, 7, 1.0e-11)[0]);
+    }
+
+    public static double lommels1(double u, double v, double z) {
+        // lommels1(u,v,z) = (bessely(v,z)*int(t -> t**u*besselj(v,t), 0, z) - besselj(v,z)*int(t -> t**u*bessely(v,t), 0, z))*(pi/2)
+        double by = besselYv(v, z);
+        double byint = integrateTanhSinhReal(x -> pow(x, u) * besselJv(v, x), 0, z, 7, 1.0e-11)[0];
+        double bj = besselJv(v, z);
+        double bjint = integrateTanhSinhReal(x -> pow(x, u) * besselYv(v, x), 0, z, 7, 1.0e-11)[0];
+        return (by * byint - bj * bjint) * PI_2;
+    }
+
+    public static double legendre(double n, double z) {
+        // Legendre polynomials
+        // P_n(z) = 2F1(-n,n+1,1,(1-z)/2)
+        return hypergeo2F1(-n, n + 1, 1, (1 - z) / 2);
+    }
+
     /**
      * Add two complex numbers together.
      *
