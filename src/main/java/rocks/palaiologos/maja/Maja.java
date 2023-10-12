@@ -2750,7 +2750,21 @@ public class Maja {
         int n = coefficients.length;
         if (n < 1)
             throw new IllegalArgumentException("Invalid number of coefficients: " + n);
-        if(n == 2) {
+        else if (n == 2) {
+            // Linear case.
+            Complex a = coefficients[1];
+            Complex b = coefficients[0];
+            if (eq(a, Complex.ZERO)) {
+                // No roots.
+                return new boolean[]{ true };
+            } else {
+                // One root.
+                Complex x = div(negate(b), a);
+                coefficients[0] = x;
+                return new boolean[]{ false };
+            }
+        }
+        else if(n == 3) {
             // Quadratic case.
             Complex a = coefficients[2];
             Complex b = coefficients[1];
