@@ -3,6 +3,7 @@ package rocks.palaiologos.maja;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -4810,5 +4811,51 @@ public class Maja {
      */
     public static double chiSquaredQuantile(double p, double df) {
         return Landau.chisquareQuantile(p, df);
+    }
+
+    /**
+     * Integrate a dyadic function over a finite interval [a,b] x [c,d] using the
+     * Gauss-Legendre quadrature. The number of intervals is given by N and the precision
+     * of the final result greatly depends on this parameter.
+     * The computation of an integral using the Gauss-Legendre quadrature involves caching the
+     * coefficients required to perform the integration depending on the value of the N parameter.
+     * This means that the first call to this method will be slower than subsequent calls with the
+     * same value of N. The coefficients are internally cached inside a ConcurrentHashMap.
+     *
+     * @param f function to integrate
+     * @param a lower bound
+     * @param b upper bound
+     * @param c lower bound
+     * @param d upper bound
+     * @param N number of intervals, N=6 tends to give a good approximation in most scenarios.
+     *          N must be between 1 and 30.
+     * @return integral of f over [a,b] x [c,d]
+     * @throws IllegalArgumentException if N is not a positive integer
+     */
+    public static double integrateGaussLegendreReal(BiFunction<Double, Double, Double> f, double a, double b, double c, double d, int N) {
+        return integrateGaussLegendreReal(x -> integrateGaussLegendreReal(y -> f.apply(x, y), c, d, N), a, b, N);
+    }
+
+    /**
+     * Integrate a dyadic function over a finite interval [a,b] x [c,d] using the
+     * Gauss-Legendre quadrature. The number of intervals is given by N and the precision
+     * of the final result greatly depends on this parameter.
+     * The computation of an integral using the Gauss-Legendre quadrature involves caching the
+     * coefficients required to perform the integration depending on the value of the N parameter.
+     * This means that the first call to this method will be slower than subsequent calls with the
+     * same value of N. The coefficients are internally cached inside a ConcurrentHashMap.
+     *
+     * @param f function to integrate
+     * @param a lower bound
+     * @param b upper bound
+     * @param c lower bound
+     * @param d upper bound
+     * @param N number of intervals, N=6 tends to give a good approximation in most scenarios.
+     *          N must be between 1 and 30.
+     * @return integral of f over [a,b] x [c,d]
+     * @throws IllegalArgumentException if N is not a positive integer
+     */
+    public static Complex integrateGaussLegendreComplex(BiFunction<Complex, Complex, Complex> f, Complex a, Complex b, Complex c, Complex d, int N) {
+        return integrateGaussLegendreComplex(x -> integrateGaussLegendreComplex(y -> f.apply(x, y), c, d, N), a, b, N);
     }
 }

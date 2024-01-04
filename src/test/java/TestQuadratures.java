@@ -44,5 +44,8 @@ public class TestQuadratures {
     public void testComplexGaussLegendre() {
         assertThat(Maja.integrateGaussLegendreComplex(Maja::exp, new Complex(1,2), new Complex(3,4), 10))
                 .isEqualTo(new Complex(-11.997578697705027, -17.672511135071467));
+        assertThat(4 * Maja.integrateGaussLegendreReal((x, y) ->
+                x * y * Maja.sqrt((1 - x) * (1 - x) + (1 - y) * (1 - y)), 0, 1, 0, 1, 6))
+                .isEqualTo(0.5213732436823451);
     }
 }
