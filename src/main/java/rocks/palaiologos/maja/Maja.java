@@ -1,5 +1,10 @@
 package rocks.palaiologos.maja;
 
+import rocks.palaiologos.maja.structure.AdditiveGroup;
+import rocks.palaiologos.maja.structure.AdditiveGroupoid;
+import rocks.palaiologos.maja.structure.MultiplicativeGroup;
+import rocks.palaiologos.maja.structure.MultiplicativeGroupoid;
+
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Random;
@@ -197,6 +202,13 @@ public class Maja {
     }
 
     /**
+     * Adds two values through an additive groupoid.
+     */
+    public static <T> T add(AdditiveGroupoid<T> groupoid, T x, T y) {
+        return groupoid.plus(x, y);
+    }
+
+    /**
      * Subtracts two double precision numbers.
      *
      * @param x
@@ -205,6 +217,13 @@ public class Maja {
      */
     public static double sub(double x, double y) {
         return x - y;
+    }
+
+    /**
+     * Subtracts two values through an additive group.
+     */
+    public static <T> T add(AdditiveGroup<T> group, T x, T y) {
+        return group.plus(x, group.addInv(y));
     }
 
     /**
@@ -219,6 +238,13 @@ public class Maja {
     }
 
     /**
+     * Multiplies two values through a multiplicative groupoid.
+     */
+    public static <T> T mul(MultiplicativeGroupoid<T> groupoid, T x, T y) {
+        return groupoid.dot(x, y);
+    }
+
+    /**
      * Divides two double precision numbers.
      *
      * @param x
@@ -227,6 +253,13 @@ public class Maja {
      */
     public static double div(double x, double y) {
         return x / y;
+    }
+
+    /**
+     * Divides two values through a multiplicative group.
+     */
+    public static <T> T mul(MultiplicativeGroup<T> group, T x, T y) {
+        return group.dot(x, group.mulInv(y));
     }
 
     /**
