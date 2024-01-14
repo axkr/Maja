@@ -168,4 +168,10 @@ public class TestArithmetic {
             }
         }
     }
+
+    @Test
+    public void testPrime() {
+        for (int i = 0; i < 1000000; i++)
+            assertEquals(Maja.isPrime(i), Maja.isPrime((long) i));
+    }
 }
