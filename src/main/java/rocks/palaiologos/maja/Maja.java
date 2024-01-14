@@ -4891,4 +4891,20 @@ public class Maja {
     public static Complex integrateGaussLegendreComplex(BiFunction<Complex, Complex, Complex> f, Complex a, Complex b, Complex c, Complex d, int N) {
         return integrateGaussLegendreComplex(x -> integrateGaussLegendreComplex(y -> f.apply(x, y), c, d, N), a, b, N);
     }
+
+    /**
+     * Primality test for an integer in range [0, 2^31-1].
+     */
+    public static boolean isPrime(int n) {
+        return Prime.is_prime_1b(n);
+    }
+
+    /**
+     * Primality test for an unsigned integer in range [0, 2^64-1].
+     * Notice that some values of n that will be interpreted as negative when signed
+     * may yield a truthy value, as the number is reinterpreted as unsigned.
+     */
+    public static boolean isPrime(long n) {
+        return Prime.is_prime_2_64(n);
+    }
 }
