@@ -4907,4 +4907,43 @@ public class Maja {
     public static boolean isPrime(long n) {
         return Prime.is_prime_2_64(n);
     }
+
+    /**
+     * Find the next prime after n.
+     * @throws IllegalArgumentException if n is negative
+     * @throws ArithmeticException if n is too large
+     */
+    public static int nextPrime(int n) {
+        if (n < 0)
+            throw new IllegalArgumentException("n must be positive.");
+        // Only even prime.
+        if (n == 2) return 3;
+        // 2^31-1 is a Mersenne prime.
+        if (n == 2147483647)
+            throw new ArithmeticException("n too large.");
+        // If n is even, add 1.
+        if (n % 2 == 0) n++;
+        while (!isPrime(n))
+            n += 2;
+        return n;
+    }
+
+    // 2^64-59 is the largest 64-bit prime.
+    private static final Long MAX_P = Long.parseUnsignedLong("18446744073709551557");
+
+    /**
+     * Find the next prime after (unsigned) n.
+     * @throws ArithmeticException if n is too large
+     */
+    public static long nextPrime(long n) {
+        // Only even prime.
+        if (n == 2) return 3;
+        if (Long.compareUnsigned(n, MAX_P) >= 0)
+            throw new ArithmeticException("n too large.");
+        // If n is even, add 1.
+        if (n % 2 == 0) n++;
+        while (!isPrime(n))
+            n += 2;
+        return n;
+    }
 }
