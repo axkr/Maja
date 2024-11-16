@@ -1,11 +1,10 @@
 package rocks.palaiologos.maja.matrix;
 
-import rocks.palaiologos.maja.Pair;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import rocks.palaiologos.maja.Pair;
 
 /**
  * A class representing a two-dimensional matrix of double precision floating point numbers.

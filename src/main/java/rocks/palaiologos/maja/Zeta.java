@@ -1,8 +1,25 @@
 package rocks.palaiologos.maja;
 
+import static rocks.palaiologos.maja.Maja.EPSILON;
+import static rocks.palaiologos.maja.Maja.PI_2;
+import static rocks.palaiologos.maja.Maja.TWO_PI;
+import static rocks.palaiologos.maja.Maja.abs;
+import static rocks.palaiologos.maja.Maja.add;
+import static rocks.palaiologos.maja.Maja.atan;
+import static rocks.palaiologos.maja.Maja.div;
+import static rocks.palaiologos.maja.Maja.eq;
+import static rocks.palaiologos.maja.Maja.exp;
+import static rocks.palaiologos.maja.Maja.floor;
+import static rocks.palaiologos.maja.Maja.gamma;
+import static rocks.palaiologos.maja.Maja.log;
+import static rocks.palaiologos.maja.Maja.max;
+import static rocks.palaiologos.maja.Maja.mul;
+import static rocks.palaiologos.maja.Maja.negate;
+import static rocks.palaiologos.maja.Maja.pow;
+import static rocks.palaiologos.maja.Maja.sin;
+import static rocks.palaiologos.maja.Maja.sub;
 import java.util.function.Function;
-
-import static rocks.palaiologos.maja.Maja.*;
+import org.hipparchus.complex.Complex;
 
 class Zeta {
     private static final double[] zetBernCoefs = new double[]
@@ -181,8 +198,8 @@ class Zeta {
         if (1.0 <= Math.abs(z)) {
             // TODO: Numerical integration. Need complex math.
             Complex result = lerch_phi(new Complex(z), new Complex(s), new Complex(v));
-            if (result.im() == 0)
-                return result.re();
+            if (result.getImaginary() == 0)
+                return result.getReal();
             else
                 return Double.POSITIVE_INFINITY;
         }
@@ -335,7 +352,7 @@ class Zeta {
 
     private static boolean isnpint(Complex a) {
         // Check if a is a non-positive integer
-        return a.im() == 0 && a.re() < 0 && Math.floor(a.re()) == a.re();
+        return a.getImaginary() == 0 && a.getReal() < 0 && Math.floor(a.getReal()) == a.getReal();
     }
 
     private static Complex recipGammaNoPole(Complex z) {
@@ -348,12 +365,12 @@ class Zeta {
         if (eq(z, 0))
             return pow(a, negate(s));
 
-        if (eq(z, 1) && s.re() > 1)
+        if (eq(z, 1) && s.getReal() > 1)
             return hurwitz_zeta(s, a);
 
-        if (a.re() < 2) {
+        if (a.getReal() < 2) {
             if (isnpint(a))
-                return Complex.COMPLEX_INFINITY;
+              return Complex.INF;
             return add(mul(z, lerch_phi(z, s, add(a, 1))), pow(pow(a, 2), negate(div(s, 2))));
         }
 
@@ -366,10 +383,10 @@ class Zeta {
         Complex L = log(z);
         Complex intmax = new Complex(Math.min(abs(z) + abs(s) + abs(a), 10));
 
-        if (s.im() == 0 && s.re() == floor(s.re()) && s.re() >= 1) {
+        if (s.getImaginary() == 0 && s.getReal() == floor(s.getReal()) && s.getReal() >= 1) {
             Complex I = Complex.ZERO;
-            if (Math.abs(L.im()) < 0.25 && L.re() >= 0) {
-                if (z.im() <= 0.0) {
+            if (Math.abs(L.getImaginary()) < 0.25 && L.getReal() >= 0) {
+                if (z.getImaginary() <= 0.0) {
                     I = add(I, Integrator.finiteTanhSinhCC(g, Complex.ZERO, new Complex(0, 1), degree, EPSILON)[0]);
                     I = add(I, Integrator.finiteTanhSinhCC(g, new Complex(0, 1), add(new Complex(1, 1), abs(L)), degree, EPSILON)[0]);
                     I = add(I, Integrator.finiteTanhSinhCC(g, add(new Complex(1, 1), abs(L)), add(abs(L), Complex.ONE), degree, EPSILON)[0]);
@@ -387,30 +404,30 @@ class Zeta {
 
         Complex residue = Complex.ZERO;
         Complex left, right, top, c;
-        if (L.re() < -0.5) {
-            c = new Complex(Math.min(abs(L.re()) / 2, 1));
+        if (L.getReal() < -0.5) {
+            c = new Complex(Math.min(abs(L.getReal()) / 2, 1));
             left = right = top = c;
-        } else if (abs(L.im()) > 0.5) {
-            c = new Complex(Math.min(abs(L.im()) / 2, 1));
+        } else if (abs(L.getImaginary()) > 0.5) {
+            c = new Complex(Math.min(abs(L.getImaginary()) / 2, 1));
             left = right = top = c;
         } else {
             residue = div(pow(negate(L), s), div(L, pow(z, a)));
-            left = add(max(0, negate(L.re())), Complex.ONE);
-            top = add(abs(L.im()), Complex.ONE);
+            left = add(max(0, negate(L.getReal())), Complex.ONE);
+            top = add(abs(L.getImaginary()), Complex.ONE);
             right = add(abs(L), Complex.ONE);
         }
 
-        boolean isreal = z.im() == 0 && z.re() < 1 && s.im() == 0 && a.im() == 0 && a.re() > 0;
+        boolean isreal = z.getImaginary() == 0 && z.getReal() < 1 && s.getImaginary() == 0 && a.getImaginary() == 0 && a.getReal() > 0;
         Complex w = pow(negate(Complex.ONE), sub(s, 1));
         Complex Int = Complex.ZERO;
 
         if (isreal) {
             Int = add(Int, mul(new Complex(0, 2), div(Integrator.finiteTanhSinhCC(
-                    g, right, add(right, mul(top, Maja.I)), degree, EPSILON)[0], w).im()));
+                    g, right, add(right, mul(top, Maja.I)), degree, EPSILON)[0], w).getImaginary()));
             Int = add(Int, mul(new Complex(0, 2), div(Integrator.finiteTanhSinhCC(
-                    g, add(right, mul(top, Maja.I)), add(negate(left), mul(top, Maja.I)), degree, EPSILON)[0], w).im()));
+                    g, add(right, mul(top, Maja.I)), add(negate(left), mul(top, Maja.I)), degree, EPSILON)[0], w).getImaginary()));
             Int = add(Int, mul(new Complex(0, 2), div(Integrator.finiteTanhSinhCC(
-                    h, add(negate(left), mul(top, Maja.I)), negate(left), degree, EPSILON)[0], w).im()));
+                    h, add(negate(left), mul(top, Maja.I)), negate(left), degree, EPSILON)[0], w).getImaginary()));
         } else {
             Int = add(Int, div(Integrator.finiteTanhSinhCC(
                     g, right, add(right, mul(top, Maja.I)), degree, EPSILON)[0], w));
@@ -438,7 +455,7 @@ class Zeta {
 
         //  This series works until the binomial coefficient blows up
         //  so use reflection.
-        if (__s.re() < 0) {
+        if (__s.getReal() < 0) {
             {
                 __zeta = __riemann_zeta_glob(sub(1, __s));
                 __zeta = mul(__zeta, div(mul(mul(pow(TWO_PI, __s), sin(mul(PI_2, __s))), gamma(sub(1, __s))), Math.PI));
@@ -493,13 +510,13 @@ class Zeta {
     }
 
     public static Complex riemann_zeta(Complex s) {
-        if (s.im() == 0) {
-            return new Complex(riemann_zeta(s.re()));
-        } else if (s.re() < -19) {
+        if (s.getImaginary() == 0) {
+            return new Complex(riemann_zeta(s.getReal()));
+        } else if (s.getReal() < -19) {
             Complex zeta = __riemann_zeta_product(sub(1, s));
             zeta = mul(zeta, div(mul(mul(pow(TWO_PI, s), sin(mul(PI_2, s))), gamma(sub(1, s))), Math.PI));
             return zeta;
-        } else if (s.re() < 20) {
+        } else if (s.getReal() < 20) {
             return __riemann_zeta_glob(s);
         } else {
             return __riemann_zeta_product(s);
@@ -509,11 +526,11 @@ class Zeta {
     public static Complex hurwitz_zeta(Complex s, Complex a) {
         // Re(a) > 0 because zeta(s,a)=zeta(s,a+1)+a^-s
         Complex result = Complex.ZERO;
-        while (a.re() <= 0) {
+        while (a.getReal() <= 0) {
             result = add(result, pow(a, negate(s)));
             a = add(a, 1);
         }
-        if (s.re() > 1) {
+        if (s.getReal() > 1) {
             Complex fa = a;
             Complex[] r = Integrator.finiteTanhSinhRC((Function<Double, Complex>) x -> {
                 // (e^(x-ax)x^(s-1))/(e^x-1) + (e^(1/x-a/x)x^(-s-1))/(e^(1/x)-1)
@@ -525,7 +542,7 @@ class Zeta {
             }, 0, 1, 7, 1e-14);
             return add(result, div(r[0], gamma(s)));
         } else if (eq(s, Complex.ONE)) {
-            return Complex.COMPLEX_INFINITY;
+          return Complex.INF;
         } else {
             // Abel-Plana formula:
             // zeta(s,a) = 0.5a^-s + (a^(1-s))/(s-1)

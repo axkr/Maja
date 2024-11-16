@@ -1,6 +1,16 @@
 package rocks.palaiologos.maja;
 
-import static rocks.palaiologos.maja.Maja.*;
+import static rocks.palaiologos.maja.Maja.I;
+import static rocks.palaiologos.maja.Maja.PI_2;
+import static rocks.palaiologos.maja.Maja.add;
+import static rocks.palaiologos.maja.Maja.div;
+import static rocks.palaiologos.maja.Maja.e1;
+import static rocks.palaiologos.maja.Maja.eq;
+import static rocks.palaiologos.maja.Maja.log;
+import static rocks.palaiologos.maja.Maja.mul;
+import static rocks.palaiologos.maja.Maja.negate;
+import static rocks.palaiologos.maja.Maja.sub;
+import org.hipparchus.complex.Complex;
 
 class TrigonometricIntegral {
     private static final double[] S1 = {
@@ -146,8 +156,8 @@ class TrigonometricIntegral {
 
     public static Complex Si(Complex z) {
         // if |ph z| < pi/2, Si(z) = 0.5i (E1(-iz) - E1(iz)) + pi/2 DLMF §6.5
-        if (z.re() < 0) return negate(Si(negate(z)));
-        if (z.re() == 0) return new Complex(0, Shi(z.im()));
+        if (z.getReal() < 0) return negate(Si(negate(z)));
+        if (z.getReal() == 0) return new Complex(0, Shi(z.getImaginary()));
         return add(mul(mul(0.5, I), sub(e1(mul(I, negate(z))), e1(mul(I, z)))), PI_2);
     }
 
@@ -185,8 +195,8 @@ class TrigonometricIntegral {
     public static Complex Ci(Complex z) {
         // if |ph z| < pi/2, Ci(z) = -0.5 (E1(-iz) + E1(iz)) DLMF §6.5
         // Ci(-x) = Ci(x) + log(-x) - log(x)
-        if (z.re() < 0) return sub(add(Ci(negate(z)), log(z)), log(negate(z)));
-        if (z.re() == 0) return add(Chi(z.im()), mul(I, PI_2));
+        if (z.getReal() < 0) return sub(add(Ci(negate(z)), log(z)), log(negate(z)));
+        if (z.getReal() == 0) return add(Chi(z.getImaginary()), mul(I, PI_2));
         return mul(-0.5, add(e1(mul(I, negate(z))), e1(mul(I, z))));
     }
 
@@ -221,8 +231,8 @@ class TrigonometricIntegral {
 
     public static Complex Shi(Complex z) {
         // Si(iz) = i Shi(z).
-        if (z.re() < 0) return negate(Shi(new Complex(-z.re(), z.im())));
-        if (z.re() == 0) return new Complex(0, Si(z.im()));
+        if (z.getReal() < 0) return negate(Shi(new Complex(-z.getReal(), z.getImaginary())));
+        if (z.getReal() == 0) return new Complex(0, Si(z.getImaginary()));
         // Knowing that if |ph z| < pi/2 (checked above), Si(z) = 0.5i (E1(-iz) - E1(iz)) + pi/2 DLMF §6.5
         // => Shi(z) = Si(iz)/i = (0.5i (E1(z) - E1(-z)) + pi/2)/i.
         return div(add(mul(mul(0.5, I), sub(e1(z), e1(negate(z)))), PI_2), I);
@@ -231,8 +241,9 @@ class TrigonometricIntegral {
     public static Complex Chi(Complex z) {
         // Holds for all z:
         // Chi(z) = Ci(iz) + log(z) - log(iz)
-        if (eq(z, Complex.ZERO)) return Complex.COMPLEX_INFINITY;
-        if (z.re() == 0) return add(Ci(z.im()), mul(I, PI_2));
+        if (eq(z, Complex.ZERO))
+          return Complex.INF;
+        if (z.getReal() == 0) return add(Ci(z.getImaginary()), mul(I, PI_2));
         return sub(add(Ci(mul(I, z)), log(z)), log(mul(I, z)));
     }
 

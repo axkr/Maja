@@ -1,6 +1,15 @@
 package rocks.palaiologos.maja;
 
-import static rocks.palaiologos.maja.Maja.*;
+import static rocks.palaiologos.maja.Maja.E;
+import static rocks.palaiologos.maja.Maja.TWO_PI;
+import static rocks.palaiologos.maja.Maja.add;
+import static rocks.palaiologos.maja.Maja.div;
+import static rocks.palaiologos.maja.Maja.mul;
+import static rocks.palaiologos.maja.Maja.pow;
+import static rocks.palaiologos.maja.Maja.sinh;
+import static rocks.palaiologos.maja.Maja.sqrt;
+import static rocks.palaiologos.maja.Maja.sub;
+import org.hipparchus.complex.Complex;
 
 class Gamma {
     // It's more efficient to simply tabulate all factorials.
@@ -161,7 +170,7 @@ class Gamma {
                 771.32342877765313, -176.61502916214059, 12.507343278686905,
                 -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7};
         int g = 7;
-        if (x.re() < 0.5) return Maja.div(Math.PI, Maja.mul(Maja.sin(Maja.mul(Math.PI, x)), gamma(Maja.sub(1, x))));
+        if (x.getReal() < 0.5) return Maja.div(Math.PI, Maja.mul(Maja.sin(Maja.mul(Math.PI, x)), gamma(Maja.sub(1, x))));
 
         x = Maja.sub(x, 1);
         Complex a = new Complex(p[0]);
@@ -215,8 +224,8 @@ class Gamma {
     }
 
     public static Complex digamma(Complex x) {
-        if (x.im() == 0 && x.re() <= 0 && x.re() == Math.floor(x.re())) return Complex.NaN;
-        if (x.re() < 0.5) return Maja.sub(digamma(Maja.sub(1, x)), Maja.div(Math.PI, Maja.tan(Maja.mul(Math.PI, x))));
+        if (x.getImaginary() == 0 && x.getReal() <= 0 && x.getReal() == Math.floor(x.getReal())) return Complex.NaN;
+        if (x.getReal() < 0.5) return Maja.sub(digamma(Maja.sub(1, x)), Maja.div(Math.PI, Maja.tan(Maja.mul(Math.PI, x))));
         final double[] lut = {
                 0.99999999999999709182,
                 57.156235665862923517,
@@ -282,18 +291,18 @@ class Gamma {
         final double F_1_30 = 1d / 30;
         final double F_1_42 = 1d / 42;
 
-        if (!Double.isFinite(x.re())) {
+        if (!Double.isFinite(x.getReal())) {
             return x;
         }
 
-        if (x.re() > 0 && x.re() <= S_LIMIT) {
+        if (x.getReal() > 0 && x.getReal() <= S_LIMIT) {
             return div(1, mul(x, x));
         }
 
         Complex trigamma = Complex.ZERO;
-        while (x.re() < C_LIMIT) {
+        while (x.getReal() < C_LIMIT) {
             trigamma = add(trigamma, div(1, mul(x, x)));
-            x = new Complex(x.re() + 1, x.im());
+            x = new Complex(x.getReal() + 1, x.getImaginary());
         }
 
         final Complex inv = div(1, mul(x, x));
@@ -479,18 +488,18 @@ class Gamma {
 
         final double REFLECTION = 0.1;
 
-        if (Double.isNaN(n.re()) || Double.isNaN(n.im())) {
+        if (Double.isNaN(n.getReal()) || Double.isNaN(n.getImaginary())) {
             return new Complex(Double.NaN, Double.NaN);
-        } else if (n.im() == 0) {
-            return new Complex(loggamma(n.re()), 0);
-        } else if (n.re() >= SMALL_RE || Math.abs(n.im()) >= SMALL_IM) {
+        } else if (n.getImaginary() == 0) {
+            return new Complex(loggamma(n.getReal()), 0);
+        } else if (n.getReal() >= SMALL_RE || Math.abs(n.getImaginary()) >= SMALL_IM) {
             return lgammaStirling(n);
-        } else if (n.re() <= REFLECTION) {
-            final double tmp = Math.copySign(TWOPI, n.im()) * Math.floor(0.5 * n.re() + 0.25);
+        } else if (n.getReal() <= REFLECTION) {
+            final double tmp = Math.copySign(TWOPI, n.getImaginary()) * Math.floor(0.5 * n.getReal() + 0.25);
             final Complex a = Maja.log(Maja.sin(Maja.mul(n, Math.PI)));
-            final Complex b = loggamma(new Complex(1 - n.re(), -n.im()));
+            final Complex b = loggamma(new Complex(1 - n.getReal(), -n.getImaginary()));
             return Maja.sub(Maja.sub(new Complex(LOGPI, tmp), a), b);
-        } else if (n.im() >= 0) {
+        } else if (n.getImaginary() >= 0) {
             return lgammaRecurrence(n);
         } else {
             return Maja.conj(lgammaRecurrence(Maja.conj(n)));
@@ -509,8 +518,8 @@ class Gamma {
 
         double a = coeffs[0];
         double b = coeffs[1];
-        double r = 2 * rzz.re();
-        double s = rzz.re() * rzz.re() + rzz.im() * rzz.im();
+        double r = 2 * rzz.getReal();
+        double s = rzz.getReal() * rzz.getReal() + rzz.getImaginary() * rzz.getImaginary();
 
         for (int i = 2; i < 8; i++) {
             final double tmp = b;
@@ -529,10 +538,10 @@ class Gamma {
         Complex shiftprod = z;
 
         z = Maja.add(z, 1);
-        while (z.re() <= 7) {
+        while (z.getReal() <= 7) {
             shiftprod = Maja.mul(shiftprod, z);
 
-            int nsb = shiftprod.im() < 0 ? 1 : 0;
+            int nsb = shiftprod.getImaginary() < 0 ? 1 : 0;
             if (nsb != 0 && sb == 0) signflips++;
             sb = nsb;
 

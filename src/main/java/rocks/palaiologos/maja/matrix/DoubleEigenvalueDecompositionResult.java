@@ -1,7 +1,6 @@
 package rocks.palaiologos.maja.matrix;
 
-import rocks.palaiologos.maja.Complex;
-
+import org.hipparchus.complex.Complex;
 /**
  * The result of eigenvalue decomposition.
  * <p>

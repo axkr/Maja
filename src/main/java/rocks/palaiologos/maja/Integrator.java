@@ -1,9 +1,14 @@
 package rocks.palaiologos.maja;
 
+import static rocks.palaiologos.maja.Maja.abs;
+import static rocks.palaiologos.maja.Maja.add;
+import static rocks.palaiologos.maja.Maja.div;
+import static rocks.palaiologos.maja.Maja.mul;
+import static rocks.palaiologos.maja.Maja.ne;
+import static rocks.palaiologos.maja.Maja.sub;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
-
-import static rocks.palaiologos.maja.Maja.*;
+import org.hipparchus.complex.Complex;
 
 class Integrator {
     private static final ConcurrentHashMap<Integer, GaussLegendreParameters> gaussLegendreParameters = new ConcurrentHashMap<>();
@@ -199,12 +204,12 @@ class Integrator {
                 double x = d * r;
                 if (a + x > a) {
                     Complex y = f.apply(a + x);
-                    if (ne(y, Complex.COMPLEX_INFINITY))
+                    if (ne(y, Complex.INF))
                         fp = y;
                 }
                 if (b - x < b) {
                     Complex y = f.apply(b - x);
-                    if (ne(y, Complex.COMPLEX_INFINITY))
+                    if (ne(y, Complex.INF))
                         fm = y;
                 }
                 q = mul(w, add(fp, fm));
@@ -246,10 +251,10 @@ class Integrator {
                 // for performance reasons.
                 Complex y;
                 y = f.apply(add(a, x));
-                if (ne(y, Complex.COMPLEX_INFINITY))
+                if (ne(y, Complex.INF))
                     fp = y;
                 y = f.apply(sub(b, x));
-                if (ne(y, Complex.COMPLEX_INFINITY))
+                if (ne(y, Complex.INF))
                     fm = y;
                 q = mul(w, add(fp, fm));
                 p = add(p, q);

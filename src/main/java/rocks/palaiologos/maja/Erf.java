@@ -1,5 +1,7 @@
 package rocks.palaiologos.maja;
 
+import org.hipparchus.complex.Complex;
+
 class Erf {
     static final double[] expa2n2 = {
             7.64405281671221563e-01,
@@ -351,12 +353,12 @@ class Erf {
     }
 
     private static Complex w_of_z(Complex z) {
-        if (z.re() == 0.0) {
-            return new Complex(erfcx(z.im()), z.re());
+        if (z.getReal() == 0.0) {
+            return new Complex(erfcx(z.getImaginary()), z.getReal());
         }
-        if (z.im() == 0) {
-            final double Wreal = Math.abs(z.re()) > 27. ? 0. : Math.exp(-z.re() * z.re());
-            final double Wimag = im_w_of_x(z.re());
+        if (z.getImaginary() == 0) {
+            final double Wreal = Math.abs(z.getReal()) > 27. ? 0. : Math.exp(-z.getReal() * z.getReal());
+            final double Wimag = im_w_of_x(z.getReal());
             return new Complex(Wreal, Wimag);
         }
 
@@ -365,8 +367,8 @@ class Erf {
         final double c = 0.329973702884629072537; // (2/pi) * a;
         final double a2 = 0.268657157075235951582; // a^2
 
-        final double x = Math.abs(z.re());
-        final double y = z.im();
+        final double x = Math.abs(z.getReal());
+        final double y = z.getImaginary();
         final double ya = Math.abs(y);
 
         Complex ret; // return value
@@ -391,7 +393,7 @@ class Erf {
            that the estimated nu be >= minimum nu to attain machine precision.
            I also separate the regions where nu == 2 and nu == 1. */
             final double ispi = 0.56418958354775628694807945156; // 1 / sqrt(pi)
-            double xs = y < 0 ? -z.re() : z.re(); // compute for -z if y < 0
+            double xs = y < 0 ? -z.getReal() : z.getReal(); // compute for -z if y < 0
             if (x + ya > 4000) { // nu <= 2
                 if (x + ya > 1e7) { // nu == 1, w(z) = i/sqrt(pi) / z
                     // scale to avoid overflow
@@ -499,7 +501,7 @@ class Erf {
                 final double sinxy = Math.sin(x * y);
                 ret = new Complex((expx2erfcxy - c * y * sum1) * Math.cos(2 * x * y) + c * x * expx2 * sinxy * sinc(x * y, sinxy));
             } else {
-                double xs = z.re();
+                double xs = z.getReal();
                 final double sinxy = Math.sin(xs * y);
                 final double sin2xy = Math.sin(2 * xs * y), cos2xy = Math.cos(2 * xs * y);
                 final double coef1 = expx2erfcxy - c * y * sum1;
@@ -547,7 +549,7 @@ class Erf {
             }
         }
         return Maja.add(ret, new Complex(0.5 * c * y * (sum2 + sum3),
-                0.5 * c * Math.copySign(sum5 - sum4, z.re())));
+                0.5 * c * Math.copySign(sum5 - sum4, z.getReal())));
     }
 
     private static double erfcx_y100(double y100) {
@@ -579,12 +581,12 @@ class Erf {
         // Compute erfi(z) = -i erf(iz),
         // the rotated complex error function.
 
-        Complex e = cerf(new Complex(-z.im(), z.re()));
-        return new Complex(e.im(), -e.re());
+        Complex e = cerf(new Complex(-z.getImaginary(), z.getReal()));
+        return new Complex(e.getImaginary(), -e.getReal());
     }
 
     public static Complex cerf(Complex z) {
-        double x = z.re(), y = z.im();
+        double x = z.getReal(), y = z.getImaginary();
 
         if (y == 0)
             return new Complex(erf(x), y); // preserve sign of 0
@@ -670,7 +672,7 @@ class Erf {
         // Compute erfc(z) = 1 - erf(z), the complex complementary error function,
         // using w_of_z except for certain regions.
 
-        double x = z.re(), y = z.im();
+        double x = z.getReal(), y = z.getImaginary();
 
         if (x == 0.)
             return new Complex(1,
@@ -697,7 +699,7 @@ class Erf {
     }
 
     public static Complex cdawson(Complex z) {
-        double x = z.re(), y = z.im();
+        double x = z.getReal(), y = z.getImaginary();
 
         // handle axes separately for speed & proper handling of x or y = Inf or NaN
         if (y == 0)
@@ -761,7 +763,7 @@ class Erf {
                 }
             }
             Complex res = Maja.sub(Maja.exp(mz2), w_of_z(z));
-            return Maja.mul(0.8862269254527580136490837416705725913990, new Complex(-res.im(), res.re()));
+            return Maja.mul(0.8862269254527580136490837416705725913990, new Complex(-res.getImaginary(), res.getReal()));
         } else { // y < 0
             if (y > -5e-3) { // duplicate from above to avoid fabs(x) call
                 if (Math.abs(x) < 5e-3) {
@@ -803,7 +805,7 @@ class Erf {
             } else if (Double.isNaN(y))
                 return new Complex(Double.NaN, Double.NaN);
             Complex res = Maja.sub(w_of_z(Maja.negate(z)), Maja.exp(mz2));
-            return Maja.mul(0.8862269254527580136490837416705725913990, new Complex(-res.im(), res.re()));
+            return Maja.mul(0.8862269254527580136490837416705725913990, new Complex(-res.getImaginary(), res.getReal()));
         }
 
     }

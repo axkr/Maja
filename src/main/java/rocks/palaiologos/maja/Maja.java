@@ -1,15 +1,15 @@
 package rocks.palaiologos.maja;
 
-import rocks.palaiologos.maja.structure.AdditiveGroup;
-import rocks.palaiologos.maja.structure.AdditiveGroupoid;
-import rocks.palaiologos.maja.structure.MultiplicativeGroup;
-import rocks.palaiologos.maja.structure.MultiplicativeGroupoid;
-
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import org.hipparchus.complex.Complex;
+import rocks.palaiologos.maja.structure.AdditiveGroup;
+import rocks.palaiologos.maja.structure.AdditiveGroupoid;
+import rocks.palaiologos.maja.structure.MultiplicativeGroup;
+import rocks.palaiologos.maja.structure.MultiplicativeGroupoid;
 
 /**
  * A slick numerics-oriented Mathematical library for Java.
@@ -565,7 +565,7 @@ public class Maja {
      * @return A complex number where the real and imaginary parts correspond to the sign of the real and imaginary parts of x.
      */
     public static Complex signum(Complex x) {
-        return new Complex(signum(x.re()), signum(x.im()));
+        return new Complex(signum(x.getReal()), signum(x.getImaginary()));
     }
 
     /**
@@ -586,7 +586,7 @@ public class Maja {
      * @return ceil(x)
      */
     public static Complex ceil(Complex x) {
-        return new Complex(Math.ceil(x.re()), Math.ceil(x.im()));
+        return new Complex(Math.ceil(x.getReal()), Math.ceil(x.getImaginary()));
     }
 
     /**
@@ -596,7 +596,7 @@ public class Maja {
      * @return floor(x)
      */
     public static Complex floor(Complex x) {
-        return new Complex(Math.floor(x.re()), Math.floor(x.im()));
+        return new Complex(Math.floor(x.getReal()), Math.floor(x.getImaginary()));
     }
 
     /**
@@ -606,7 +606,7 @@ public class Maja {
      * @return round(x)
      */
     public static Complex round(Complex x) {
-        return new Complex(Math.round(x.re()), Math.round(x.im()));
+        return new Complex(Math.round(x.getReal()), Math.round(x.getImaginary()));
     }
 
     /**
@@ -870,7 +870,7 @@ public class Maja {
      * @return |re(x)| + i|im(x)|
      */
     public static Complex absparts(Complex x) {
-        return new Complex(abs(x.re()), abs(x.im()));
+        return new Complex(abs(x.getReal()), abs(x.getImaginary()));
     }
 
     /**
@@ -2412,7 +2412,7 @@ public class Maja {
      */
     public static Complex rem(Complex a, Complex b) {
         Complex quot = div(a, b);
-        quot = new Complex(floor(quot.re()), floor(quot.im()));
+        quot = new Complex(floor(quot.getReal()), floor(quot.getImaginary()));
         return sub(a, mul(b, quot));
     }
 
@@ -2824,8 +2824,8 @@ public class Maja {
         re = new double[n];
         im = new double[n];
         for (int i = 0; i < n; i++) {
-            re[i] = coefficients[i].re();
-            im[i] = coefficients[i].im();
+            re[i] = coefficients[i].getReal();
+            im[i] = coefficients[i].getImaginary();
         }
         boolean[] err = new boolean[n];
         Arrays.fill(err, true);
@@ -2929,7 +2929,7 @@ public class Maja {
      * @return a + b
      */
     public static Complex add(Complex a, Complex b) {
-        return new Complex(a.re() + b.re(), a.im() + b.im());
+        return new Complex(a.getReal() + b.getReal(), a.getImaginary() + b.getImaginary());
     }
 
     /**
@@ -3467,7 +3467,7 @@ public class Maja {
      * @return a + b
      */
     public static Complex add(Complex a, double b) {
-        return new Complex(a.re() + b, a.im());
+        return new Complex(a.getReal() + b, a.getImaginary());
     }
 
     /**
@@ -3478,7 +3478,7 @@ public class Maja {
      * @return a + b
      */
     public static Complex add(double a, Complex b) {
-        return new Complex(b.re() + a, b.im());
+        return new Complex(b.getReal() + a, b.getImaginary());
     }
 
     /**
@@ -3489,7 +3489,7 @@ public class Maja {
      * @return a - b
      */
     public static Complex sub(Complex a, Complex b) {
-        return new Complex(a.re() - b.re(), a.im() - b.im());
+        return new Complex(a.getReal() - b.getReal(), a.getImaginary() - b.getImaginary());
     }
 
     /**
@@ -3500,7 +3500,7 @@ public class Maja {
      * @return a - b
      */
     public static Complex sub(Complex a, double b) {
-        return new Complex(a.re() - b, a.im());
+        return new Complex(a.getReal() - b, a.getImaginary());
     }
 
     /**
@@ -3511,7 +3511,7 @@ public class Maja {
      * @return a - b
      */
     public static Complex sub(double a, Complex b) {
-        return new Complex(a - b.re(), -b.im());
+        return new Complex(a - b.getReal(), -b.getImaginary());
     }
 
     /**
@@ -3522,7 +3522,7 @@ public class Maja {
      * @return a * b
      */
     public static Complex mul(Complex a, Complex b) {
-        return new Complex(a.re() * b.re() - a.im() * b.im(), a.re() * b.im() + a.im() * b.re());
+        return new Complex(a.getReal() * b.getReal() - a.getImaginary() * b.getImaginary(), a.getReal() * b.getImaginary() + a.getImaginary() * b.getReal());
     }
 
     /**
@@ -3533,7 +3533,7 @@ public class Maja {
      * @return a * b
      */
     public static Complex mul(Complex a, double b) {
-        return new Complex(a.re() * b, a.im() * b);
+        return new Complex(a.getReal() * b, a.getImaginary() * b);
     }
 
     /**
@@ -3544,7 +3544,7 @@ public class Maja {
      * @return a * b
      */
     public static Complex mul(double a, Complex b) {
-        return new Complex(b.re() * a, b.im() * a);
+        return new Complex(b.getReal() * a, b.getImaginary() * a);
     }
 
     /**
@@ -3555,8 +3555,8 @@ public class Maja {
      * @return a / b
      */
     public static Complex div(Complex a, Complex b) {
-        double d = b.re() * b.re() + b.im() * b.im();
-        return new Complex((a.re() * b.re() + a.im() * b.im()) / d, (a.im() * b.re() - a.re() * b.im()) / d);
+        double d = b.getReal() * b.getReal() + b.getImaginary() * b.getImaginary();
+        return new Complex((a.getReal() * b.getReal() + a.getImaginary() * b.getImaginary()) / d, (a.getImaginary() * b.getReal() - a.getReal() * b.getImaginary()) / d);
     }
 
     /**
@@ -3567,7 +3567,7 @@ public class Maja {
      * @return a / b
      */
     public static Complex div(Complex a, double b) {
-        return new Complex(a.re() / b, a.im() / b);
+        return new Complex(a.getReal() / b, a.getImaginary() / b);
     }
 
     /**
@@ -3578,8 +3578,8 @@ public class Maja {
      * @return a / b
      */
     public static Complex div(double a, Complex b) {
-        double d = b.re() * b.re() + b.im() * b.im();
-        return new Complex(a * b.re() / d, -a * b.im() / d);
+        double d = b.getReal() * b.getReal() + b.getImaginary() * b.getImaginary();
+        return new Complex(a * b.getReal() / d, -a * b.getImaginary() / d);
     }
 
     /**
@@ -3589,7 +3589,7 @@ public class Maja {
      * @return conj(a)
      */
     public static Complex conj(Complex a) {
-        return new Complex(a.re(), -a.im());
+        return new Complex(a.getReal(), -a.getImaginary());
     }
 
     /**
@@ -3599,7 +3599,7 @@ public class Maja {
      * @return |a|
      */
     public static double abs(Complex a) {
-        return Math.sqrt(a.re() * a.re() + a.im() * a.im());
+        return Math.sqrt(a.getReal() * a.getReal() + a.getImaginary() * a.getImaginary());
     }
 
     /**
@@ -3609,13 +3609,13 @@ public class Maja {
      * @return sqrt(x)
      */
     public static Complex sqrt(Complex x) {
-        if (x.im() == 0)
-            return new Complex(Math.sqrt(x.re()), 0);
+        if (x.getImaginary() == 0)
+            return new Complex(Math.sqrt(x.getReal()), 0);
         else {
             double r = abs(x);
-            double t = Math.sqrt(0.5 * (r + x.re()));
-            double u = Math.sqrt(0.5 * (r - x.re()));
-            if (x.im() > 0)
+            double t = Math.sqrt(0.5 * (r + x.getReal()));
+            double u = Math.sqrt(0.5 * (r - x.getReal()));
+            if (x.getImaginary() > 0)
                 return new Complex(t, u);
             else
                 return new Complex(t, -u);
@@ -3629,8 +3629,8 @@ public class Maja {
      * @return exp(x)
      */
     public static Complex exp(Complex x) {
-        double r = Math.exp(x.re());
-        return new Complex(r * Math.cos(x.im()), r * Math.sin(x.im()));
+        double r = Math.exp(x.getReal());
+        return new Complex(r * Math.cos(x.getImaginary()), r * Math.sin(x.getImaginary()));
     }
 
     /**
@@ -3643,7 +3643,7 @@ public class Maja {
         // Log(z) = ln(r) + i*theta = ln(|z|) + i*arg(z) = ln(|z|) + i*atan2(im(z), re(z))
         // There's some ridiculous nonsense involving the sign of zero here.
         // Pretend that it doesn't exist...
-        return new Complex(Math.log(abs(x)), Math.atan2(x.im() == -0.0 ? 0.0 : x.im(), x.re() == -0.0 ? 0.0 : x.re()));
+        return new Complex(Math.log(abs(x)), Math.atan2(x.getImaginary() == -0.0 ? 0.0 : x.getImaginary(), x.getReal() == -0.0 ? 0.0 : x.getReal()));
     }
 
     /**
@@ -3653,7 +3653,7 @@ public class Maja {
      * @return Arg(z)
      */
     public static double arg(Complex z) {
-        return Math.atan2(z.im(), z.re());
+        return Math.atan2(z.getImaginary(), z.getReal());
     }
 
     /**
@@ -3674,7 +3674,7 @@ public class Maja {
      * @return true if a == b, false otherwise
      */
     public static boolean eq(Complex a, Complex b) {
-        return a.re() == b.re() && a.im() == b.im();
+        return a.getReal() == b.getReal() && a.getImaginary() == b.getImaginary();
     }
 
     /**
@@ -3685,7 +3685,7 @@ public class Maja {
      * @return true if a == b, false otherwise
      */
     public static boolean eq(double a, Complex b) {
-        return b.re() == a && b.im() == 0;
+        return b.getReal() == a && b.getImaginary() == 0;
     }
 
     /**
@@ -3696,7 +3696,7 @@ public class Maja {
      * @return true if a == b, false otherwise
      */
     public static boolean eq(Complex a, double b) {
-        return a.re() == b && a.im() == 0;
+        return a.getReal() == b && a.getImaginary() == 0;
     }
 
     /**
@@ -3707,7 +3707,7 @@ public class Maja {
      * @return true if a != b, false otherwise
      */
     public static boolean ne(Complex a, double b) {
-        return b != a.re() || a.im() != 0;
+        return b != a.getReal() || a.getImaginary() != 0;
     }
 
     /**
@@ -3718,7 +3718,7 @@ public class Maja {
      * @return true if a != b, false otherwise
      */
     public static boolean ne(double a, Complex b) {
-        return a != b.re() || b.im() != 0;
+        return a != b.getReal() || b.getImaginary() != 0;
     }
 
     /**
@@ -3729,7 +3729,7 @@ public class Maja {
      * @return true if a != b, false otherwise
      */
     public static boolean ne(Complex a, Complex b) {
-        return a.re() != b.re() || a.im() != b.im();
+        return a.getReal() != b.getReal() || a.getImaginary() != b.getImaginary();
     }
 
     /**
@@ -3741,7 +3741,7 @@ public class Maja {
      * @return true if a ~= b, false otherwise
      */
     public static boolean eq(Complex a, Complex b, double tol) {
-        return Math.abs(a.re() - b.re()) < tol && Math.abs(a.im() - b.im()) < tol;
+        return Math.abs(a.getReal() - b.getReal()) < tol && Math.abs(a.getImaginary() - b.getImaginary()) < tol;
     }
 
     /**
@@ -3768,7 +3768,7 @@ public class Maja {
         if (n < 0)
             return null;
         double magnitude = abs(x);
-        double phase = Math.atan2(x.im(), x.re());
+        double phase = Math.atan2(x.getImaginary(), x.getReal());
         double nthRootOfMagnitude = root(magnitude, n);
         Complex[] roots = new Complex[n];
         for (int i = 0; i < n; i++) {
@@ -3786,7 +3786,7 @@ public class Maja {
      */
     public static Complex cbrt(Complex x) {
         double magnitude = abs(x);
-        double phase = Math.atan2(x.im(), x.re());
+        double phase = Math.atan2(x.getImaginary(), x.getReal());
         double nthRootOfMagnitude = root(magnitude, 3);
         double theta = (phase + 2 * Math.PI) / 3;
         return new Complex(nthRootOfMagnitude * Math.cos(theta), nthRootOfMagnitude * Math.sin(theta));
@@ -3800,7 +3800,7 @@ public class Maja {
      */
     public static Complex sin(Complex x) {
         // sin(a+bi) = sin(a)cosh(b) + i*cos(a)sinh(b)
-        return new Complex(Math.sin(x.re()) * Math.cosh(x.im()), Math.cos(x.re()) * Math.sinh(x.im()));
+        return new Complex(Math.sin(x.getReal()) * Math.cosh(x.getImaginary()), Math.cos(x.getReal()) * Math.sinh(x.getImaginary()));
     }
 
     /**
@@ -3811,7 +3811,7 @@ public class Maja {
      */
     public static Complex cos(Complex x) {
         // cos(a+bi) = cos(a)cosh(b) - i*sin(a)sinh(b)
-        return new Complex(Math.cos(x.re()) * Math.cosh(x.im()), -Math.sin(x.re()) * Math.sinh(x.im()));
+        return new Complex(Math.cos(x.getReal()) * Math.cosh(x.getImaginary()), -Math.sin(x.getReal()) * Math.sinh(x.getImaginary()));
     }
 
     /**
@@ -3822,8 +3822,8 @@ public class Maja {
      */
     public static Complex tan(Complex x) {
         // tan(a+bi) = sin(2a)+i*sinh(2b) / cos(2a)+cosh(2b)
-        double d = Math.cos(2 * x.re()) + Math.cosh(2 * x.im());
-        return new Complex(Math.sin(2 * x.re()) / d, Math.sinh(2 * x.im()) / d);
+        double d = Math.cos(2 * x.getReal()) + Math.cosh(2 * x.getImaginary());
+        return new Complex(Math.sin(2 * x.getReal()) / d, Math.sinh(2 * x.getImaginary()) / d);
     }
 
     /**
@@ -3902,7 +3902,7 @@ public class Maja {
      */
     public static Complex sinh(Complex a) {
         // sinh(a+bi) = sinh(a)cos(b) + i*cosh(a)sin(b)
-        return new Complex(Math.sinh(a.re()) * Math.cos(a.im()), Math.cosh(a.re()) * Math.sin(a.im()));
+        return new Complex(Math.sinh(a.getReal()) * Math.cos(a.getImaginary()), Math.cosh(a.getReal()) * Math.sin(a.getImaginary()));
     }
 
     /**
@@ -3913,7 +3913,7 @@ public class Maja {
      */
     public static Complex cosh(Complex a) {
         // cosh(a+bi) = cosh(a)cos(b) + i*sinh(a)sin(b)
-        return new Complex(Math.cosh(a.re()) * Math.cos(a.im()), Math.sinh(a.re()) * Math.sin(a.im()));
+        return new Complex(Math.cosh(a.getReal()) * Math.cos(a.getImaginary()), Math.sinh(a.getReal()) * Math.sin(a.getImaginary()));
     }
 
     /**
@@ -3924,8 +3924,8 @@ public class Maja {
      */
     public static Complex tanh(Complex a) {
         // tanh(a+bi) = sinh(2a)+i*sin(2b) / cosh(2a)+cos(2b)
-        double d = Math.cosh(2 * a.re()) + Math.cos(2 * a.im());
-        return new Complex(Math.sinh(2 * a.re()) / d, Math.sin(2 * a.im()) / d);
+        double d = Math.cosh(2 * a.getReal()) + Math.cos(2 * a.getImaginary());
+        return new Complex(Math.sinh(2 * a.getReal()) / d, Math.sin(2 * a.getImaginary()) / d);
     }
 
     /**
@@ -4110,7 +4110,7 @@ public class Maja {
      * @return -x
      */
     public static Complex negate(Complex x) {
-        return new Complex(-x.re(), -x.im());
+        return new Complex(-x.getReal(), -x.getImaginary());
     }
 
     /**
@@ -4601,14 +4601,14 @@ public class Maja {
      * @return iround(z)
      */
     public static Complex chop(Complex z) {
-        if (Math.abs(z.re()) < EPSILON)
-            z = new Complex(0, z.im());
-        if (Math.abs(z.im()) < EPSILON)
-            z = new Complex(z.re(), 0);
-        if (Math.abs(z.re() - Math.round(z.re())) < EPSILON)
-            z = new Complex(Math.round(z.re()), z.im());
-        if (Math.abs(z.im() - Math.round(z.im())) < EPSILON)
-            z = new Complex(z.re(), Math.round(z.im()));
+        if (Math.abs(z.getReal()) < EPSILON)
+            z = new Complex(0, z.getImaginary());
+        if (Math.abs(z.getImaginary()) < EPSILON)
+            z = new Complex(z.getReal(), 0);
+        if (Math.abs(z.getReal() - Math.round(z.getReal())) < EPSILON)
+            z = new Complex(Math.round(z.getReal()), z.getImaginary());
+        if (Math.abs(z.getImaginary() - Math.round(z.getImaginary())) < EPSILON)
+            z = new Complex(z.getReal(), Math.round(z.getImaginary()));
         return z;
     }
 

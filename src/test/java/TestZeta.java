@@ -1,8 +1,7 @@
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import rocks.palaiologos.maja.Maja;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestZeta {
     @Test
@@ -19,7 +18,7 @@ public class TestZeta {
         assertThat(Maja.zeta(Double.POSITIVE_INFINITY)).isEqualTo(1);
         assertThat(Maja.zeta(Double.NEGATIVE_INFINITY)).isNaN();
         assertThat(Maja.zeta(Double.NaN)).isNaN();
-    }
+      }
 
     @Test
     public void testHurwitz() {

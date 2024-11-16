@@ -1,11 +1,10 @@
 package rocks.palaiologos.maja.matrix;
 
-import rocks.palaiologos.maja.Complex;
-import rocks.palaiologos.maja.Pair;
-
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import org.hipparchus.complex.Complex;
+import rocks.palaiologos.maja.Pair;
 
 /**
  * A class representing a two-dimensional matrix of double precision complex numbers.

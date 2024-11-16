@@ -1,6 +1,17 @@
 package rocks.palaiologos.maja;
 
-import static rocks.palaiologos.maja.Maja.*;
+import static rocks.palaiologos.maja.Maja.EULER_GAMMA;
+import static rocks.palaiologos.maja.Maja.I;
+import static rocks.palaiologos.maja.Maja.PI;
+import static rocks.palaiologos.maja.Maja.abs;
+import static rocks.palaiologos.maja.Maja.add;
+import static rocks.palaiologos.maja.Maja.div;
+import static rocks.palaiologos.maja.Maja.exp;
+import static rocks.palaiologos.maja.Maja.log;
+import static rocks.palaiologos.maja.Maja.mul;
+import static rocks.palaiologos.maja.Maja.negate;
+import static rocks.palaiologos.maja.Maja.sub;
+import org.hipparchus.complex.Complex;
 
 class Ei {
     private Ei() {
@@ -129,11 +140,11 @@ class Ei {
 
     public static Complex e1(Complex Z) {
         Complex CE1;
-        double X = Z.re();
+        double X = Z.getReal();
         double A0 = abs(Z);
-        double XT = -2 * abs(Z.im());
+        double XT = -2 * abs(Z.getImaginary());
         if (A0 == 0.0) {
-            CE1 = Complex.COMPLEX_INFINITY;
+          CE1 = Complex.INF;
         } else if (A0 <= 5.0 || X < XT && A0 < 40.0) {
             CE1 = Complex.ONE;
             Complex CR = Complex.ONE;
@@ -144,8 +155,8 @@ class Ei {
                     break;
             }
 
-            if (X <= 0.0 && Z.im() == 0.0) {
-                CE1 = sub(add(sub(-EULER_GAMMA, log(negate(Z))), mul(Z, CE1)), mul(dsign(PI, Z.im()), I));
+            if (X <= 0.0 && Z.getImaginary() == 0.0) {
+                CE1 = sub(add(sub(-EULER_GAMMA, log(negate(Z))), mul(Z, CE1)), mul(dsign(PI, Z.getImaginary()), I));
             } else {
                 CE1 = add(sub(-EULER_GAMMA, log(Z)), mul(Z, CE1));
             }
@@ -168,7 +179,7 @@ class Ei {
             }
 
             CE1 = mul(exp(negate(Z)), ZC);
-            if (X <= 0.0 && Z.im() == 0.0)
+            if (X <= 0.0 && Z.getImaginary() == 0.0)
                 CE1 = sub(CE1, mul(PI, I));
         }
         return CE1;

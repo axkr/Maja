@@ -1,6 +1,19 @@
 package rocks.palaiologos.maja;
 
-import static rocks.palaiologos.maja.Maja.*;
+import static rocks.palaiologos.maja.Maja.EPSILON;
+import static rocks.palaiologos.maja.Maja.PI;
+import static rocks.palaiologos.maja.Maja.PI_4;
+import static rocks.palaiologos.maja.Maja.abs;
+import static rocks.palaiologos.maja.Maja.add;
+import static rocks.palaiologos.maja.Maja.cos;
+import static rocks.palaiologos.maja.Maja.div;
+import static rocks.palaiologos.maja.Maja.exp;
+import static rocks.palaiologos.maja.Maja.mul;
+import static rocks.palaiologos.maja.Maja.negate;
+import static rocks.palaiologos.maja.Maja.sin;
+import static rocks.palaiologos.maja.Maja.sqrt;
+import static rocks.palaiologos.maja.Maja.sub;
+import org.hipparchus.complex.Complex;
 
 class Airy {
     private final static double[] APGN = {
@@ -243,21 +256,21 @@ class Airy {
     }
 
     public static Complex[] airy(Complex x) {
-        if (Complex.isNaN(x))
+      if (x.isNaN())
             return new Complex[]{Complex.NaN, Complex.NaN, Complex.NaN, Complex.NaN};
-        if (Complex.isInfinite(x))
-            return new Complex[]{Complex.ZERO, Complex.ZERO, Complex.COMPLEX_INFINITY, Complex.COMPLEX_INFINITY};
+      if (x.isInfinite())
+        return new Complex[] {Complex.ZERO, Complex.ZERO, Complex.INF, Complex.INF};
 
         Complex z, zz, t, f, g, uf, ug, k, zeta, theta;
         int domflg;
         Complex ai = Complex.NaN, aip = Complex.NaN, bi = Complex.NaN, bip = Complex.NaN;
 
         domflg = 0;
-        if (x.re() > 103.892) {
-            return new Complex[]{Complex.ZERO, Complex.ZERO, Complex.COMPLEX_INFINITY, Complex.COMPLEX_INFINITY};
+        if (x.getReal() > 103.892) {
+          return new Complex[] {Complex.ZERO, Complex.ZERO, Complex.INF, Complex.INF};
         }
 
-        if (x.re() < -2.09) {
+        if (x.getReal() < -2.09) {
             t = sqrt(negate(x));
             zeta = div(mul(mul(-2.0, x), t), 3.0);
             t = sqrt(t);
@@ -279,7 +292,7 @@ class Airy {
             return new Complex[]{ai, aip, bi, bip};
         }
 
-        if (x.re() >= 2.09) {
+        if (x.getReal() >= 2.09) {
             domflg = 5;
             t = sqrt(x);
             zeta = div(mul(mul(2.0, x), t), 3.0);
@@ -293,7 +306,7 @@ class Airy {
             f = div(Spence.polevl(z, APN, 7), Spence.polevl(z, APD, 7));
             aip = mul(f, k);
 
-            if (x.re() > 8.3203353) /* zeta > 16 */ {
+            if (x.getReal() > 8.3203353) /* zeta > 16 */ {
                 f = div(mul(z, Spence.polevl(z, BN16, 4)), Spence.p1evl(z, BD16, 5));
                 k = mul(5.64189583547756286948E-1, g);
                 bi = div(mul(k, add(1, f)), t);
@@ -310,7 +323,7 @@ class Airy {
         ug = x;
         k = Complex.ONE;
         z = mul(x, mul(x, x));
-        while (t.re() > EPSILON) {
+        while (t.getReal() > EPSILON) {
             uf = mul(uf, z);
             k = add(k, 1);
             uf = div(uf, k);
@@ -339,7 +352,7 @@ class Airy {
         uf = div(uf, 3.0);
         t = Complex.ONE;
 
-        while (t.re() > EPSILON) {
+        while (t.getReal() > EPSILON) {
             uf = mul(uf, z);
             ug = div(ug, k);
             k = add(k, 1);

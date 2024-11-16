@@ -1,16 +1,15 @@
 package rocks.palaiologos.maja.expression;
 
+import java.util.AbstractList;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 import org.antlr.v4.runtime.tree.ParseTree;
-import rocks.palaiologos.maja.Complex;
+import org.hipparchus.complex.Complex;
 import rocks.palaiologos.maja.Maja;
 import rocks.palaiologos.maja.matrix.ComplexMatrix;
 import rocks.palaiologos.maja.matrix.DoubleMatrix;
 import rocks.palaiologos.maja.matrix.Matrix;
-
-import java.util.AbstractList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implements ExpressionVisitor<Object> {
     private Environment env;
@@ -1445,7 +1444,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
                 } else if (a instanceof Double d1 && b instanceof DoubleMatrix dm2) {
                     return dm2.map(d -> Maja.eq(d1, d, dtol) ? 1.0 : 0.0);
                 } else if (a instanceof DoubleMatrix dm1 && b instanceof Complex c2) {
-                    if(c2.im() != 0) {
+                    if(c2.getImaginary() != 0) {
                         DoubleMatrix result = new DoubleMatrix(dm1.height(), dm1.width());
                         for(int i = 0; i < dm1.height(); i++) {
                             for(int j = 0; j < dm1.width(); j++) {
@@ -1454,10 +1453,10 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
                         }
                         return result;
                     }
-                    double c2re = c2.re();
+                    double c2re = c2.getReal();
                     return dm1.map(d -> Maja.eq(c2re, d, dtol) ? 1.0 : 0.0);
                 } else if (a instanceof Complex c1 && b instanceof DoubleMatrix dm2) {
-                    if(c1.im() != 0) {
+                    if(c1.getImaginary() != 0) {
                         DoubleMatrix result = new DoubleMatrix(dm2.height(), dm2.width());
                         for(int i = 0; i < dm2.height(); i++) {
                             for(int j = 0; j < dm2.width(); j++) {
@@ -1466,7 +1465,7 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
                         }
                         return result;
                     }
-                    double c1re = c1.re();
+                    double c1re = c1.getReal();
                     return dm2.map(d -> Maja.eq(c1re, d, dtol) ? 1.0 : 0.0);
                 } else if (a instanceof ComplexMatrix dm1 && b instanceof Long l2) {
                     Complex cl2 = new Complex(l2);
@@ -5518,8 +5517,8 @@ class DefaultExpressionVisitor extends AbstractParseTreeVisitor<Object> implemen
                     return mat;
             }
         } else if (input instanceof Complex c) {
-            if (c.im() == 0) {
-                return c.re();
+            if (c.getImaginary() == 0) {
+                return c.getReal();
             } else {
                 return c;
             }

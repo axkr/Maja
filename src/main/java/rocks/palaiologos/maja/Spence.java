@@ -1,6 +1,24 @@
 package rocks.palaiologos.maja;
 
-import static rocks.palaiologos.maja.Maja.*;
+import static rocks.palaiologos.maja.Maja.EPSILON;
+import static rocks.palaiologos.maja.Maja.I;
+import static rocks.palaiologos.maja.Maja.TWO_PI;
+import static rocks.palaiologos.maja.Maja.abs;
+import static rocks.palaiologos.maja.Maja.add;
+import static rocks.palaiologos.maja.Maja.binomial;
+import static rocks.palaiologos.maja.Maja.div;
+import static rocks.palaiologos.maja.Maja.eq;
+import static rocks.palaiologos.maja.Maja.factorial;
+import static rocks.palaiologos.maja.Maja.gamma;
+import static rocks.palaiologos.maja.Maja.hurwitzZeta;
+import static rocks.palaiologos.maja.Maja.log;
+import static rocks.palaiologos.maja.Maja.mul;
+import static rocks.palaiologos.maja.Maja.ne;
+import static rocks.palaiologos.maja.Maja.negate;
+import static rocks.palaiologos.maja.Maja.pow;
+import static rocks.palaiologos.maja.Maja.sub;
+import static rocks.palaiologos.maja.Maja.zeta;
+import org.hipparchus.complex.Complex;
 
 class Spence {
     private final static double[] A = {
@@ -311,7 +329,7 @@ class Spence {
     }
 
     private static boolean isint(Complex x) {
-        return x.im() == 0 && (int) x.re() == x.re();
+        return x.getImaginary() == 0 && (int) x.getReal() == x.getReal();
     }
 
     // Based on a mpmath algorithm.
@@ -325,9 +343,9 @@ class Spence {
         else if (abs(z) <= 0.75 || !isint(s) && abs(z) < 0.9)
             return polylogSeries(s, z);
         else if (abs(z) >= 1.4 && isint(s))
-            return add(mul(pow(negate(Complex.ONE), add(s, Complex.ONE)), polylogSeries(s, div(1, z))), polylogContinuation((int) s.re(), z));
+            return add(mul(pow(negate(Complex.ONE), add(s, Complex.ONE)), polylogSeries(s, div(1, z))), polylogContinuation((int) s.getReal(), z));
         else if (isint(s))
-            return polylogUnitCircle((int) s.re(), z);
+            return polylogUnitCircle((int) s.getReal(), z);
         else
             return polylogGeneral(s, z);
     }
@@ -366,9 +384,9 @@ class Spence {
             return Complex.ZERO;
         Complex twopij = mul(I, TWO_PI);
         Complex a = div(mul(pow(twopij, -n), bernpoly(n, div(log(z), twopij))), factorial(n));
-        if (z.im() == 0 && z.re() < 0)
-            a = new Complex(a.re(), 0);
-        if (z.im() < 0 || z.im() == 0 && z.re() >= 1)
+        if (z.getImaginary() == 0 && z.getReal() < 0)
+            a = new Complex(a.getReal(), 0);
+        if (z.getImaginary() < 0 || z.getImaginary() == 0 && z.getReal() >= 1)
             a = sub(a, div(mul(pow(log(z), n - 1), twopij), factorial(n - 1)));
         return a;
     }
@@ -419,8 +437,8 @@ class Spence {
         } else {
             throw new ArithmeticException("n == 1.");
         }
-        if (z.im() == 0 && z.re() < 0)
-            l = new Complex(l.re(), 0);
+        if (z.getImaginary() == 0 && z.getReal() < 0)
+            l = new Complex(l.getReal(), 0);
         return l;
     }
 

@@ -1,6 +1,13 @@
 package rocks.palaiologos.maja;
 
-import static rocks.palaiologos.maja.Maja.*;
+import static rocks.palaiologos.maja.Maja.div;
+import static rocks.palaiologos.maja.Maja.integrateTanhSinhComplex;
+import static rocks.palaiologos.maja.Maja.integrateTanhSinhReal;
+import static rocks.palaiologos.maja.Maja.mul;
+import static rocks.palaiologos.maja.Maja.sin;
+import static rocks.palaiologos.maja.Maja.sqrt;
+import static rocks.palaiologos.maja.Maja.sub;
+import org.hipparchus.complex.Complex;
 
 class LegendreIntegral {
     // The relative error in this approximation tends to be about 4.98535*10^-10%.

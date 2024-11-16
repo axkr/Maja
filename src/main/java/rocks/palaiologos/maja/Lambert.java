@@ -1,6 +1,21 @@
 package rocks.palaiologos.maja;
 
-import static rocks.palaiologos.maja.Maja.*;
+import static rocks.palaiologos.maja.Maja.E;
+import static rocks.palaiologos.maja.Maja.EPSILON;
+import static rocks.palaiologos.maja.Maja.I;
+import static rocks.palaiologos.maja.Maja.TWO_PI;
+import static rocks.palaiologos.maja.Maja.abs;
+import static rocks.palaiologos.maja.Maja.add;
+import static rocks.palaiologos.maja.Maja.div;
+import static rocks.palaiologos.maja.Maja.eq;
+import static rocks.palaiologos.maja.Maja.exp;
+import static rocks.palaiologos.maja.Maja.fma;
+import static rocks.palaiologos.maja.Maja.log;
+import static rocks.palaiologos.maja.Maja.mul;
+import static rocks.palaiologos.maja.Maja.negate;
+import static rocks.palaiologos.maja.Maja.sqrt;
+import static rocks.palaiologos.maja.Maja.sub;
+import org.hipparchus.complex.Complex;
 
 class Lambert {
     private static final double[] c = {-1.0, 2.331643981597124203363536062168,
@@ -115,7 +130,7 @@ class Lambert {
     }
 
     private static Complex pevl(final double[] coeffs, Complex z) {
-        return add(mul(z, fma(2 * z.re(), coeffs[0], coeffs[1])), fma(-z.re() * z.re() - z.im() * z.im(), coeffs[0], coeffs[2]));
+        return add(mul(z, fma(2 * z.getReal(), coeffs[0], coeffs[1])), fma(-z.getReal() * z.getReal() - z.getImaginary() * z.getImaginary(), coeffs[0], coeffs[2]));
     }
 
     private static Complex lwA(Complex z, long k) {
@@ -136,14 +151,14 @@ class Lambert {
     }
 
     public static Complex lambertW(Complex z, long k) {
-        if (Complex.isNaN(z))
+      if (z.isNaN())
             return z;
-        if (Complex.isInfinite(z))
+          if (z.isInfinite())
             return add(z, mul(TWO_PI * k, I));
         if (eq(z, Complex.ZERO)) {
             if (k == 0)
                 return z;
-            return Complex.COMPLEX_INFINITY;
+              return Complex.INF;
         } else if (eq(z, Complex.ONE) && k == 0) {
             // Series expansion fails to converge.
             return new Complex(0.56714329040978387299997);
@@ -154,14 +169,14 @@ class Lambert {
         if (k == 0) {
             if (abs(add(z, 0.36787944117144232159553)) < 0.3) {
                 w = lwBpt(z);
-            } else if (z.re() > -1 && z.re() < 1.5 && abs(z.im()) < 1 && -2.5 * abs(z.im()) - 0.2 < z.re()) {
+            } else if (z.getReal() > -1 && z.getReal() < 1.5 && abs(z.getImaginary()) < 1 && -2.5 * abs(z.getImaginary()) - 0.2 < z.getReal()) {
                 w = lwPade0(z);
             } else {
                 w = lwA(z, k);
             }
         } else if (k == -1) {
-            if (absz <= 0.36787944117144232159553 && z.im() == 0 && z.re() < 0) {
-                w = log(new Complex(-z.re()));
+            if (absz <= 0.36787944117144232159553 && z.getImaginary() == 0 && z.getReal() < 0) {
+                w = log(new Complex(-z.getReal()));
             } else {
                 w = lwA(z, k);
             }
@@ -169,7 +184,7 @@ class Lambert {
             w = lwA(z, k);
         }
 
-        if (w.re() >= 0) {
+        if (w.getReal() >= 0) {
             for (int i = 0; i < 100; i++) {
                 Complex ew = exp(negate(w));
                 Complex wewz = sub(w, mul(z, ew));

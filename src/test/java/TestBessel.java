@@ -1,8 +1,6 @@
-import org.junit.jupiter.api.Test;
-import rocks.palaiologos.maja.Complex;
-import rocks.palaiologos.maja.Maja;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.Test;
+import rocks.palaiologos.maja.Maja;
 
 public class TestBessel {
     // TODO: Asymptotic behaviours.

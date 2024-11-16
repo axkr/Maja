@@ -1,10 +1,9 @@
 package rocks.palaiologos.maja.matrix;
 
-import rocks.palaiologos.maja.Complex;
-import rocks.palaiologos.maja.Maja;
-
 import java.util.Arrays;
 import java.util.Objects;
+import org.hipparchus.complex.Complex;
+import rocks.palaiologos.maja.Maja;
 
 class EigenvalueDecompositionImpl {
     private final int n;
