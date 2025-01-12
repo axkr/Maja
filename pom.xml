@@ -39,12 +39,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.github.bsideup.jabel</groupId>
-			<artifactId>jabel-javac-plugin</artifactId>
-			<version>0.4.1</version>
-			<scope>provided</scope>
-		</dependency>
 	</dependencies>
 
 	<name>Maja</name>

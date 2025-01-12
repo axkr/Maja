@@ -1,25 +1,54 @@
 package rocks.palaiologos.maja.matrix;
 
 import org.hipparchus.complex.Complex;
-/**
- * The result of eigenvalue decomposition.
- * <p>
- * If A is symmetric, then A = V*D*V' where the eigenvalue matrix D is
- * diagonal and the eigenvector matrix V is orthogonal.
- * i.e. A = V.times(D.times(V.transpose())) and
- * V.times(V.transpose()) equals the identity matrix.
- * <p>
- * If A is not symmetric, then the eigenvalue matrix D is block diagonal
- * with the real eigenvalues in 1-by-1 blocks and any complex eigenvalues,
- * lambda + i*mu, in 2-by-2 blocks, [lambda, mu; -mu, lambda].  The
- * columns of V represent the eigenvectors in the sense that A*V = V*D,
- * i.e. A.times(V) equals V.times(D).  The matrix V may be badly
- * conditioned, or even singular.
- * <p>
- * The complex eigenvalues are stored in a Complex array 'e'.
- * @author Palaiologos
- */
-import com.github.bsideup.jabel.Desugar;
-@Desugar
-public record DoubleEigenvalueDecompositionResult(DoubleMatrix V, DoubleMatrix D, Complex[] e) {
+
+public class DoubleEigenvalueDecompositionResult {
+  private final DoubleMatrix V;
+  private final DoubleMatrix D;
+  private final Complex[] e;
+
+  public DoubleEigenvalueDecompositionResult(DoubleMatrix V, DoubleMatrix D, Complex[] e) {
+    this.V = V;
+    this.D = D;
+    this.e = e;
+  }
+
+  public DoubleMatrix v() {
+    return V;
+  }
+
+  public DoubleMatrix d() {
+    return D;
+  }
+
+  public Complex[] e() {
+    return e;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o)
+      return true;
+    if (o == null || getClass() != o.getClass())
+      return false;
+    DoubleEigenvalueDecompositionResult that = (DoubleEigenvalueDecompositionResult) o;
+    return java.util.Objects.equals(V, that.V) && java.util.Objects.equals(D, that.D)
+        && java.util.Arrays.equals(e, that.e);
+  }
+
+  @Override
+  public int hashCode() {
+    int result = java.util.Objects.hash(V, D);
+    result = 31 * result + java.util.Arrays.hashCode(e);
+    return result;
+  }
+
+  @Override
+  public String toString() {
+      return "DoubleEigenvalueDecompositionResult{" +
+              "V=" + V +
+              ", D=" + D +
+              ", e=" + java.util.Arrays.toString(e) +
+              '}';
+  }
 }
