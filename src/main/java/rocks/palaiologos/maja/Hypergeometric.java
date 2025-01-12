@@ -625,8 +625,12 @@ class Hypergeometric {
                 x = 1.0 / x;
 
                 switch (type)    /* "type" given as subroutine argument */ {
-                    case 1 -> alast *= 0.5 + (0.125 + 0.25 * b - 0.5 * a + 0.25 * x - 0.25 * n) / x;
-                    case 2 -> alast *= 2.0 / 3.0 - b + 2.0 * a + x - n;
+                  case 1:
+                    alast *= 0.5 + (0.125 + 0.25 * b - 0.5 * a + 0.25 * x - 0.25 * n) / x;
+                    break;
+                  case 2:
+                    alast *= 2.0 / 3.0 - b + 2.0 * a + x - n;
+                    break;
                 }
 
                 /* estimate error due to roundoff, cancellation, and nonconvergence */
@@ -648,8 +652,12 @@ class Hypergeometric {
                 x = 1.0 / x;
 
                 switch (type)    /* "type" given as subroutine argument */ {
-                    case 1 -> alast *= 0.5 + (0.125 + 0.25 * b - 0.5 * a + 0.25 * x - 0.25 * n) / x;
-                    case 2 -> alast *= 2.0 / 3.0 - b + 2.0 * a + x - n;
+                  case 1:
+                    alast *= 0.5 + (0.125 + 0.25 * b - 0.5 * a + 0.25 * x - 0.25 * n) / x;
+                    break;
+                  case 2:
+                    alast *= 2.0 / 3.0 - b + 2.0 * a + x - n;
+                    break;
                 }
 
                 /* estimate error due to roundoff, cancellation, and nonconvergence */
